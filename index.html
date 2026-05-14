@@ -603,8 +603,9 @@
     const title  = list[offset % list.length];
 
     try {
+      const OMDB_KEY = '21cd354a';
       const res = await fetch(
-        `/api/movie?t=${encodeURIComponent(title)}`,
+        `https://www.omdbapi.com/?t=${encodeURIComponent(title)}&plot=full&apikey=${OMDB_KEY}`,
         { signal: AbortSignal.timeout(8000) }
       );
       const movie = await res.json();
