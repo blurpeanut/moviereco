@@ -81,7 +81,22 @@
     #errorBanner.show { display: block; }
 
     /* ── INTRO ─────────────────────────────────────────────────── */
-    #intro { gap: 0; text-align: center; padding: 2rem; }
+    #intro { padding: 0; justify-content: stretch; align-items: stretch; }
+
+    .intro-scroll {
+      width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 0 2rem 4rem;
+    }
+    .intro-scroll::-webkit-scrollbar { width: 4px; }
+    .intro-scroll::-webkit-scrollbar-track { background: transparent; }
+    .intro-scroll::-webkit-scrollbar-thumb { background: rgba(245,200,66,0.25); border-radius: 2px; }
+
+    .intro-hero {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+      width: 100%;
+    }
 
     .intro-eyebrow {
       font-family: var(--sans); font-size: 0.65rem;
@@ -348,11 +363,19 @@
 
 <!-- ── INTRO ───────────────────────────────────────────────────── -->
 <section class="screen active" id="intro">
-  <p class="intro-eyebrow">A cinematic experience</p>
-  <h1 class="intro-title">Vibe<br><span class="gold">Check</span></h1>
-  <div class="intro-rule"></div>
-  <p class="intro-sub">Four questions. One perfect movie. No spoilers.</p>
-  <button class="btn-primary" onclick="startQuiz()"><span>Begin the Check</span></button>
+  <div class="intro-scroll">
+    <div class="intro-hero">
+      <p class="intro-eyebrow">A cinematic experience</p>
+      <h1 class="intro-title">Vibe<br><span class="gold">Check</span></h1>
+      <div class="intro-rule"></div>
+      <p class="intro-sub">Four questions. One perfect movie. No spoilers.</p>
+      <button class="btn-primary" onclick="startQuiz()"><span>Begin the Check</span></button>
+    </div>
+    <div class="comments-section">
+      <p class="plot-label" style="margin-bottom:1.5rem;">Discussion</p>
+      <div id="disqus_thread"></div>
+    </div>
+  </div>
 </section>
 
 <!-- ── QUIZ ────────────────────────────────────────────────────── -->
@@ -434,11 +457,6 @@
           <button class="btn-ghost" onclick="restart()">Change My Vibe</button>
         </div>
       </div>
-    </div>
-
-    <div class="comments-section">
-      <p class="plot-label" style="margin-bottom:1.5rem;">Discussion</p>
-      <div id="disqus_thread"></div>
     </div>
   </div>
 </section>
