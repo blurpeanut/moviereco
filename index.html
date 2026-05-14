@@ -18,7 +18,14 @@
       --muted:  rgba(240,237,232,0.5);
       --serif:  'Cormorant Garamond', Georgia, serif;
       --sans:   'DM Sans', sans-serif;
+      --vibe-r: 245; --vibe-g: 200; --vibe-b: 66; /* default gold */
     }
+
+    /* mood-based vibe colour overrides */
+    body[data-mood="a"] { --vibe-r: 80;  --vibe-g: 140; --vibe-b: 255; } /* blue — cry */
+    body[data-mood="b"] { --vibe-r: 248; --vibe-g: 140; --vibe-b: 40;  } /* orange — laugh */
+    body[data-mood="c"] { --vibe-r: 220; --vibe-g: 60;  --vibe-b: 60;  } /* red — thriller */
+    body[data-mood="d"] { --vibe-r: 230; --vibe-g: 90;  --vibe-b: 130; } /* pink — heartwarming */
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -42,8 +49,9 @@
       content: '';
       position: fixed; top: -30%; left: -15%;
       width: 55%; height: 75%;
-      background: radial-gradient(ellipse, rgba(245,200,66,0.05) 0%, transparent 65%);
+      background: radial-gradient(ellipse, rgba(var(--vibe-r),var(--vibe-g),var(--vibe-b),0.07) 0%, transparent 65%);
       pointer-events: none; z-index: 0;
+      transition: background 1.2s ease;
     }
 
     /* ── screens ───────────────────────────────────────────────── */
@@ -242,10 +250,14 @@
     }
     .vibe-pill {
       display: inline-flex; align-items: center; gap: 0.6rem;
-      background: rgba(245,200,66,0.1); border: 1px solid rgba(245,200,66,0.28);
+      background: rgba(var(--vibe-r),var(--vibe-g),var(--vibe-b),0.12);
+      border: 1px solid rgba(var(--vibe-r),var(--vibe-g),var(--vibe-b),0.35);
       padding: 0.4rem 1.3rem;
       font-family: var(--sans); font-size: 0.72rem;
-      letter-spacing: 0.08em; color: var(--gold); margin-bottom: 2.5rem;
+      letter-spacing: 0.08em;
+      color: rgb(var(--vibe-r),var(--vibe-g),var(--vibe-b));
+      margin-bottom: 2.5rem;
+      transition: all 1.2s ease;
     }
     .result-layout {
       display: grid; grid-template-columns: 240px 1fr;
@@ -255,8 +267,9 @@
     .poster-wrap { position: relative; }
     .poster-glow {
       position: absolute; inset: -24px;
-      background: radial-gradient(ellipse, rgba(245,200,66,0.22) 0%, transparent 68%);
+      background: radial-gradient(ellipse, rgba(var(--vibe-r),var(--vibe-g),var(--vibe-b),0.28) 0%, transparent 68%);
       z-index: 0; animation: glowPulse 2.8s ease-in-out infinite alternate;
+      transition: background 1.2s ease;
     }
     @keyframes glowPulse { from { opacity: 0.55; } to { opacity: 1; } }
     .poster-img {
@@ -578,6 +591,7 @@
   }
 
   function showResult(movie, mood) {
+    document.body.dataset.mood = mood;
     const score = Math.floor(Math.random() * 13) + 87;
 
     document.getElementById('vibePill').textContent      = `✦ ${score}% match  ·  ${MOOD_LABEL[mood]}`;
@@ -610,6 +624,7 @@
 
   function restart() {
     currentQ = 0; answers = {};
+    delete document.body.dataset.mood;
     const inner = document.getElementById('quizInner');
     inner.style.transition = ''; inner.style.opacity = ''; inner.style.transform = '';
     showScreen('intro');
