@@ -8,28 +8,26 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --black:   #07070f;
-      --navy:    #0d0d1c;
-      --surface: #111124;
-      --card:    #15152a;
-      --border:  rgba(245,200,66,0.14);
-      --gold:    #f5c842;
-      --amber:   #e8a020;
-      --glow:    rgba(245,200,66,0.25);
-      --text:    #f0ede8;
-      --muted:   rgba(240,237,232,0.5);
-      --serif:   'Cormorant Garamond', Georgia, serif;
-      --sans:    'DM Sans', sans-serif;
+      --black:  #07070f;
+      --card:   #15152a;
+      --border: rgba(245,200,66,0.14);
+      --gold:   #f5c842;
+      --amber:  #e8a020;
+      --glow:   rgba(245,200,66,0.25);
+      --text:   #f0ede8;
+      --muted:  rgba(240,237,232,0.5);
+      --serif:  'Cormorant Garamond', Georgia, serif;
+      --sans:   'DM Sans', sans-serif;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     html, body {
-      width: 100%; min-height: 100vh;
+      width: 100%; height: 100%;
       background: var(--black);
       color: var(--text);
       font-family: var(--sans);
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
     /* film grain */
@@ -40,7 +38,7 @@
       pointer-events: none; z-index: 9999; mix-blend-mode: overlay;
     }
 
-    /* ambient top-left glow */
+    /* ambient glow */
     body::after {
       content: '';
       position: fixed; top: -30%; left: -15%;
@@ -49,23 +47,37 @@
       pointer-events: none; z-index: 0;
     }
 
-    /* ── screens ──────────────────────────────────────────────── */
+    /* ── screens ───────────────────────────────────────────────── */
     .screen {
       position: fixed; inset: 0;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      padding: 2rem;
       opacity: 0; transform: translateY(28px);
       pointer-events: none;
       transition: opacity 0.5s cubic-bezier(0.4,0,0.2,1),
                   transform 0.5s cubic-bezier(0.4,0,0.2,1);
       z-index: 10;
     }
-    .screen.active   { opacity: 1; transform: translateY(0); pointer-events: all; }
-    .screen.exit-up  { opacity: 0; transform: translateY(-32px); pointer-events: none; }
+    .screen.active  { opacity: 1; transform: translateY(0); pointer-events: all; }
+    .screen.exit-up { opacity: 0; transform: translateY(-32px); pointer-events: none; }
 
-    /* ── INTRO ────────────────────────────────────────────────── */
-    #intro { gap: 0; text-align: center; }
+    /* ── server status dot ─────────────────────────────────────── */
+    #statusDot {
+      position: fixed; bottom: 1.4rem; right: 1.6rem;
+      display: flex; align-items: center; gap: 0.5rem;
+      font-family: var(--sans); font-size: 0.6rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--muted); z-index: 100; cursor: default;
+    }
+    #statusDot .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #555; transition: background 0.4s ease;
+    }
+    #statusDot.online .dot  { background: #4caf7d; box-shadow: 0 0 6px #4caf7d88; }
+    #statusDot.offline .dot { background: #e05252; box-shadow: 0 0 6px #e0525288; }
+
+    /* ── INTRO ─────────────────────────────────────────────────── */
+    #intro { gap: 0; text-align: center; padding: 2rem; }
 
     .intro-eyebrow {
       font-family: var(--sans); font-size: 0.65rem;
@@ -73,30 +85,25 @@
       color: var(--gold); margin-bottom: 1.25rem;
       animation: fadeUp 0.8s 0.2s both;
     }
-
     .intro-title {
       font-family: var(--serif); font-weight: 300; font-style: italic;
-      font-size: clamp(5.5rem, 16vw, 13rem);
+      font-size: clamp(5rem, 15vw, 12rem);
       line-height: 0.88; letter-spacing: -0.02em;
-      color: var(--text); margin-bottom: 0.6rem;
       animation: fadeUp 0.8s 0.35s both;
     }
     .intro-title .gold { color: var(--gold); }
-
     .intro-rule {
       width: 60px; height: 1px;
       background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      margin: 1.6rem auto;
-      animation: fadeUp 0.8s 0.5s both;
+      margin: 1.6rem auto; animation: fadeUp 0.8s 0.5s both;
     }
-
     .intro-sub {
-      font-family: var(--serif); font-size: clamp(1rem, 2.2vw, 1.35rem);
-      font-weight: 300; font-style: italic;
-      color: var(--muted); margin-bottom: 3rem;
-      animation: fadeUp 0.8s 0.6s both;
+      font-family: var(--serif); font-size: clamp(0.95rem, 2vw, 1.3rem);
+      font-weight: 300; font-style: italic; color: var(--muted);
+      margin-bottom: 3rem; animation: fadeUp 0.8s 0.6s both;
     }
 
+    /* ── buttons ───────────────────────────────────────────────── */
     .btn-primary {
       font-family: var(--sans); font-size: 0.72rem; font-weight: 500;
       letter-spacing: 0.22em; text-transform: uppercase;
@@ -129,47 +136,50 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── QUIZ ─────────────────────────────────────────────────── */
-    #quiz { width: 100%; max-width: 860px; }
+    /* ── QUIZ ──────────────────────────────────────────────────── */
+    #quiz {
+      width: 100%; max-width: 720px;
+      padding: 2rem;
+    }
+
+    #quizInner {
+      width: 100%;
+      display: flex; flex-direction: column; align-items: center;
+    }
 
     .quiz-header {
       width: 100%; display: flex; align-items: center;
-      justify-content: space-between; margin-bottom: 2.5rem;
+      justify-content: space-between; margin-bottom: 2rem;
     }
-
     .quiz-step {
       font-family: var(--serif); font-size: 0.85rem;
       font-style: italic; color: var(--muted);
     }
-
     .progress-track { display: flex; gap: 6px; align-items: center; }
-
     .progress-dot {
-      height: 3px; background: var(--border);
+      height: 3px; width: 22px; background: var(--border);
       transition: background 0.4s ease, width 0.4s ease;
-      width: 22px;
     }
     .progress-dot.done   { background: rgba(245,200,66,0.35); }
     .progress-dot.active { background: var(--gold); width: 38px; }
 
     .quiz-question {
       font-family: var(--serif);
-      font-size: clamp(1.7rem, 3.8vw, 2.9rem);
+      font-size: clamp(1.6rem, 3.5vw, 2.7rem);
       font-weight: 300; line-height: 1.22;
-      text-align: center; margin-bottom: 2.5rem;
+      text-align: center; margin-bottom: 2.2rem; width: 100%;
     }
 
     .options-grid {
       display: grid; grid-template-columns: 1fr 1fr;
-      gap: 1rem; width: 100%;
+      gap: 0.9rem; width: 100%;
     }
-
     .option-card {
       background: var(--card); border: 1px solid var(--border);
-      padding: 2rem 1.5rem; cursor: pointer;
+      padding: 1.8rem 1.4rem; cursor: pointer;
       display: flex; flex-direction: column;
-      align-items: center; gap: 0.7rem; text-align: center;
-      transition: border-color 0.22s ease, transform 0.22s ease, background 0.22s ease;
+      align-items: center; gap: 0.65rem; text-align: center;
+      transition: border-color 0.22s ease, transform 0.22s ease;
       position: relative; overflow: hidden;
     }
     .option-card::before {
@@ -178,92 +188,94 @@
       opacity: 0; transition: opacity 0.25s ease;
     }
     .option-card:hover::before { opacity: 1; }
-    .option-card:hover {
-      border-color: rgba(245,200,66,0.45);
-      transform: translateY(-3px);
-    }
+    .option-card:hover { border-color: rgba(245,200,66,0.45); transform: translateY(-3px); }
     .option-card.selected {
       border-color: var(--gold);
       background: linear-gradient(135deg, rgba(245,200,66,0.1) 0%, var(--card) 100%);
     }
     .option-card.selected::after {
-      content: '✓';
-      position: absolute; top: 0.6rem; right: 0.8rem;
-      font-size: 0.65rem; color: var(--gold);
+      content: '✓'; position: absolute; top: 0.55rem; right: 0.75rem;
+      font-size: 0.6rem; color: var(--gold);
       font-family: var(--sans); font-weight: 500;
     }
-
-    .option-emoji { font-size: 2.4rem; line-height: 1; }
-
+    .option-emoji { font-size: 2.2rem; line-height: 1; }
     .option-label {
-      font-family: var(--serif); font-size: 1.05rem;
+      font-family: var(--serif); font-size: 1rem;
       font-weight: 400; color: var(--text); line-height: 1.3;
     }
 
-    /* quiz slide transition helpers */
-    #quiz.slide-out { opacity: 0; transform: translateX(-30px) !important; }
-    #quiz.slide-in  { opacity: 0; transform: translateX(30px) !important; }
-
-    /* ── LOADING ──────────────────────────────────────────────── */
+    /* ── LOADING ───────────────────────────────────────────────── */
     #loading { gap: 2.5rem; text-align: center; }
 
-    .film-strip {
-      display: flex; gap: 5px; align-items: center;
-    }
+    .film-strip { display: flex; gap: 5px; align-items: center; }
     .film-frame {
-      width: 10px; height: 14px;
-      background: var(--gold);
-      animation: filmPulse 1.4s ease-in-out infinite;
-      border-radius: 1px;
+      width: 10px; height: 14px; background: var(--gold);
+      animation: filmPulse 1.4s ease-in-out infinite; border-radius: 1px;
     }
+    .film-frame:nth-child(3), .film-frame:nth-child(6) { height: 20px; }
     .film-frame:nth-child(1) { animation-delay: 0s; }
     .film-frame:nth-child(2) { animation-delay: 0.15s; }
-    .film-frame:nth-child(3) { animation-delay: 0.3s; height: 20px; }
+    .film-frame:nth-child(3) { animation-delay: 0.3s; }
     .film-frame:nth-child(4) { animation-delay: 0.45s; }
     .film-frame:nth-child(5) { animation-delay: 0.6s; }
-    .film-frame:nth-child(6) { animation-delay: 0.75s; height: 20px; }
+    .film-frame:nth-child(6) { animation-delay: 0.75s; }
     .film-frame:nth-child(7) { animation-delay: 0.9s; }
-
     @keyframes filmPulse {
-      0%, 100% { opacity: 0.2; transform: scaleY(0.7); }
-      50%       { opacity: 1;   transform: scaleY(1); }
+      0%,100% { opacity: 0.2; transform: scaleY(0.7); }
+      50%      { opacity: 1;   transform: scaleY(1); }
     }
-
     .loading-text {
       font-family: var(--serif); font-size: 1.2rem;
       font-style: italic; color: var(--muted);
+      transition: opacity 0.25s ease;
     }
 
-    /* ── RESULT ───────────────────────────────────────────────── */
-    #result {
-      width: 100%; max-width: 1080px;
-      overflow-y: auto; padding: 3.5rem 2rem;
-      justify-content: flex-start; align-items: center;
+    /* ── ERROR BANNER ──────────────────────────────────────────── */
+    #errorBanner {
+      display: none; position: fixed;
+      top: 1.5rem; left: 50%; transform: translateX(-50%);
+      background: rgba(224,82,82,0.12); border: 1px solid rgba(224,82,82,0.4);
+      color: #e05252; padding: 0.75rem 1.5rem;
+      font-family: var(--sans); font-size: 0.75rem;
+      letter-spacing: 0.05em; text-align: center;
+      z-index: 200; max-width: 90vw;
     }
+    #errorBanner.show { display: block; }
+
+    /* ── RESULT ────────────────────────────────────────────────── */
+    #result { padding: 0; justify-content: stretch; align-items: stretch; }
+
+    .result-scroll {
+      width: 100%; height: 100%;
+      overflow-y: auto; overflow-x: hidden;
+      display: flex; flex-direction: column;
+      align-items: center;
+      padding: 3rem 2rem 4rem;
+    }
+
+    /* custom scrollbar */
+    .result-scroll::-webkit-scrollbar { width: 4px; }
+    .result-scroll::-webkit-scrollbar-track { background: transparent; }
+    .result-scroll::-webkit-scrollbar-thumb { background: rgba(245,200,66,0.25); border-radius: 2px; }
 
     .result-eyebrow {
       font-family: var(--sans); font-size: 0.62rem;
       letter-spacing: 0.38em; text-transform: uppercase;
-      color: var(--gold); margin-bottom: 0.6rem;
-      text-align: center; width: 100%;
+      color: var(--gold); margin-bottom: 0.6rem; text-align: center;
     }
-
     .vibe-pill {
       display: inline-flex; align-items: center; gap: 0.6rem;
-      background: rgba(245,200,66,0.1);
-      border: 1px solid rgba(245,200,66,0.28);
+      background: rgba(245,200,66,0.1); border: 1px solid rgba(245,200,66,0.28);
       padding: 0.4rem 1.3rem;
       font-family: var(--sans); font-size: 0.72rem;
-      letter-spacing: 0.08em; color: var(--gold);
-      margin-bottom: 3rem;
+      letter-spacing: 0.08em; color: var(--gold); margin-bottom: 2.5rem;
     }
 
     .result-layout {
-      display: grid; grid-template-columns: 260px 1fr;
-      gap: 3rem; width: 100%; align-items: start;
+      display: grid; grid-template-columns: 240px 1fr;
+      gap: 3rem; width: 100%; max-width: 1000px; align-items: start;
     }
 
-    /* poster */
     .poster-wrap { position: relative; }
     .poster-glow {
       position: absolute; inset: -24px;
@@ -271,61 +283,49 @@
       z-index: 0; animation: glowPulse 2.8s ease-in-out infinite alternate;
     }
     @keyframes glowPulse {
-      from { opacity: 0.55; }
-      to   { opacity: 1; }
+      from { opacity: 0.55; } to { opacity: 1; }
     }
     .poster-img {
       width: 100%; display: block; position: relative; z-index: 1;
       box-shadow: 0 28px 70px rgba(0,0,0,0.85), 0 0 40px rgba(245,200,66,0.12);
     }
     .poster-missing {
-      width: 100%; aspect-ratio: 2/3;
-      background: var(--card); border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
+      width: 100%; aspect-ratio: 2/3; background: var(--card);
+      border: 1px solid var(--border); display: flex;
+      align-items: center; justify-content: center;
       font-size: 4rem; position: relative; z-index: 1;
     }
 
-    /* info panel */
-    .result-info { display: flex; flex-direction: column; gap: 1.6rem; }
+    .result-info { display: flex; flex-direction: column; gap: 1.5rem; }
 
     .movie-title {
       font-family: var(--serif);
-      font-size: clamp(2.2rem, 4.5vw, 4.2rem);
-      font-weight: 300; line-height: 1.0;
-      letter-spacing: -0.015em;
+      font-size: clamp(2rem, 4vw, 3.8rem);
+      font-weight: 300; line-height: 1.0; letter-spacing: -0.015em;
     }
     .movie-year {
-      font-family: var(--serif); font-size: 1.05rem;
+      font-family: var(--serif); font-size: 1rem;
       font-style: italic; color: var(--gold); margin-top: 0.3rem;
     }
-
     .pitch {
-      font-family: var(--serif); font-size: 1.2rem;
+      font-family: var(--serif); font-size: 1.15rem;
       font-style: italic; font-weight: 300; color: var(--muted);
-      border-left: 2px solid var(--gold); padding-left: 1.2rem;
-      line-height: 1.55;
+      border-left: 2px solid var(--gold); padding-left: 1.2rem; line-height: 1.55;
     }
-
-    .meta-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem;
-    }
+    .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     .meta-item { display: flex; flex-direction: column; gap: 0.3rem; }
     .meta-label {
       font-family: var(--sans); font-size: 0.58rem;
       letter-spacing: 0.28em; text-transform: uppercase;
       color: rgba(245,200,66,0.55);
     }
-    .meta-value {
-      font-family: var(--serif); font-size: 1rem; color: var(--text);
-    }
+    .meta-value { font-family: var(--serif); font-size: 0.98rem; color: var(--text); }
     .imdb-row { display: flex; align-items: baseline; gap: 0.3rem; }
     .imdb-num {
-      font-family: var(--serif); font-size: 2.1rem;
+      font-family: var(--serif); font-size: 2rem;
       font-weight: 600; color: var(--gold);
     }
-    .imdb-denom {
-      font-family: var(--sans); font-size: 0.72rem; color: var(--muted);
-    }
+    .imdb-denom { font-family: var(--sans); font-size: 0.7rem; color: var(--muted); }
     .span-2 { grid-column: span 2; }
 
     .plot-block { border-top: 1px solid var(--border); padding-top: 1.4rem; }
@@ -335,27 +335,31 @@
       color: rgba(245,200,66,0.55); margin-bottom: 0.65rem;
     }
     .plot-text {
-      font-family: var(--serif); font-size: 0.98rem;
+      font-family: var(--serif); font-size: 0.95rem;
       line-height: 1.75; color: var(--muted); font-weight: 300;
     }
+    .result-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.5rem; }
 
-    .result-actions { display: flex; gap: 1rem; margin-top: 0.5rem; flex-wrap: wrap; }
-
-    /* ── responsive ───────────────────────────────────────────── */
+    /* ── responsive ────────────────────────────────────────────── */
     @media (max-width: 680px) {
-      .options-grid { grid-template-columns: 1fr 1fr; gap: 0.7rem; }
-      .option-card { padding: 1.4rem 0.9rem; }
-      .option-emoji { font-size: 2rem; }
+      .options-grid { gap: 0.65rem; }
+      .option-card { padding: 1.3rem 0.9rem; }
+      .option-emoji { font-size: 1.9rem; }
       .option-label { font-size: 0.9rem; }
       .result-layout { grid-template-columns: 1fr; }
-      .poster-wrap { max-width: 200px; margin: 0 auto; }
-      .meta-grid { grid-template-columns: 1fr 1fr; }
+      .poster-wrap { max-width: 190px; margin: 0 auto; }
     }
   </style>
 </head>
 <body>
 
-<!-- ── INTRO ──────────────────────────────────────────────────── -->
+<!-- server status indicator -->
+<div id="statusDot"><div class="dot"></div><span id="statusLabel">checking...</span></div>
+
+<!-- error banner -->
+<div id="errorBanner" id="errorBanner"></div>
+
+<!-- ── INTRO ───────────────────────────────────────────────────── -->
 <section class="screen active" id="intro">
   <p class="intro-eyebrow">A cinematic experience</p>
   <h1 class="intro-title">Vibe<br><span class="gold">Check</span></h1>
@@ -364,98 +368,93 @@
   <button class="btn-primary" onclick="startQuiz()"><span>Begin the Check</span></button>
 </section>
 
-<!-- ── QUIZ ───────────────────────────────────────────────────── -->
+<!-- ── QUIZ ────────────────────────────────────────────────────── -->
 <section class="screen" id="quiz">
-  <div class="quiz-header">
-    <span class="quiz-step" id="stepLabel">Question 1 of 4</span>
-    <div class="progress-track" id="progressTrack">
-      <div class="progress-dot active"></div>
-      <div class="progress-dot"></div>
-      <div class="progress-dot"></div>
-      <div class="progress-dot"></div>
+  <div id="quizInner">
+    <div class="quiz-header">
+      <span class="quiz-step" id="stepLabel">Question 1 of 4</span>
+      <div class="progress-track">
+        <div class="progress-dot active"></div>
+        <div class="progress-dot"></div>
+        <div class="progress-dot"></div>
+        <div class="progress-dot"></div>
+      </div>
     </div>
+    <p class="quiz-question" id="questionText"></p>
+    <div class="options-grid" id="optionsGrid"></div>
   </div>
-  <p class="quiz-question" id="questionText"></p>
-  <div class="options-grid" id="optionsGrid"></div>
 </section>
 
-<!-- ── LOADING ────────────────────────────────────────────────── -->
+<!-- ── LOADING ─────────────────────────────────────────────────── -->
 <section class="screen" id="loading">
   <div class="film-strip">
-    <div class="film-frame"></div>
-    <div class="film-frame"></div>
-    <div class="film-frame"></div>
-    <div class="film-frame"></div>
-    <div class="film-frame"></div>
-    <div class="film-frame"></div>
+    <div class="film-frame"></div><div class="film-frame"></div>
+    <div class="film-frame"></div><div class="film-frame"></div>
+    <div class="film-frame"></div><div class="film-frame"></div>
     <div class="film-frame"></div>
   </div>
   <p class="loading-text" id="loadingText">Scanning the archives...</p>
 </section>
 
-<!-- ── RESULT ─────────────────────────────────────────────────── -->
+<!-- ── RESULT ──────────────────────────────────────────────────── -->
 <section class="screen" id="result">
-  <p class="result-eyebrow">Your vibe. Your movie.</p>
-  <div class="vibe-pill" id="vibePill">✦ loading...</div>
+  <div class="result-scroll">
+    <p class="result-eyebrow">Your vibe. Your movie.</p>
+    <div class="vibe-pill" id="vibePill">✦ loading...</div>
 
-  <div class="result-layout">
-    <div class="poster-wrap" id="posterWrap">
-      <div class="poster-glow"></div>
-    </div>
+    <div class="result-layout">
+      <div class="poster-wrap" id="posterWrap"><div class="poster-glow"></div></div>
 
-    <div class="result-info">
-      <div>
-        <h2 class="movie-title" id="movieTitle">—</h2>
-        <p class="movie-year" id="movieYear">—</p>
-      </div>
-
-      <p class="pitch" id="pitchText">—</p>
-
-      <div class="meta-grid">
-        <div class="meta-item">
-          <span class="meta-label">IMDb Rating</span>
-          <div class="imdb-row">
-            <span class="imdb-num" id="imdbRating">—</span>
-            <span class="imdb-denom">/ 10</span>
+      <div class="result-info">
+        <div>
+          <h2 class="movie-title" id="movieTitle">—</h2>
+          <p class="movie-year" id="movieYear">—</p>
+        </div>
+        <p class="pitch" id="pitchText">—</p>
+        <div class="meta-grid">
+          <div class="meta-item">
+            <span class="meta-label">IMDb Rating</span>
+            <div class="imdb-row">
+              <span class="imdb-num" id="imdbRating">—</span>
+              <span class="imdb-denom">/ 10</span>
+            </div>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Runtime</span>
+            <span class="meta-value" id="movieRuntime">—</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Genre</span>
+            <span class="meta-value" id="movieGenre">—</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Rated</span>
+            <span class="meta-value" id="movieRated">—</span>
+          </div>
+          <div class="meta-item span-2">
+            <span class="meta-label">Director</span>
+            <span class="meta-value" id="movieDirector">—</span>
+          </div>
+          <div class="meta-item span-2">
+            <span class="meta-label">Cast</span>
+            <span class="meta-value" id="movieActors">—</span>
           </div>
         </div>
-        <div class="meta-item">
-          <span class="meta-label">Runtime</span>
-          <span class="meta-value" id="movieRuntime">—</span>
+        <div class="plot-block">
+          <p class="plot-label">Synopsis</p>
+          <p class="plot-text" id="moviePlot">—</p>
         </div>
-        <div class="meta-item">
-          <span class="meta-label">Genre</span>
-          <span class="meta-value" id="movieGenre">—</span>
+        <div class="result-actions">
+          <button class="btn-primary" onclick="restart()"><span>Try Again</span></button>
+          <button class="btn-ghost" onclick="restart()">Change My Vibe</button>
         </div>
-        <div class="meta-item">
-          <span class="meta-label">Rated</span>
-          <span class="meta-value" id="movieRated">—</span>
-        </div>
-        <div class="meta-item span-2">
-          <span class="meta-label">Director</span>
-          <span class="meta-value" id="movieDirector">—</span>
-        </div>
-        <div class="meta-item span-2">
-          <span class="meta-label">Cast</span>
-          <span class="meta-value" id="movieActors">—</span>
-        </div>
-      </div>
-
-      <div class="plot-block">
-        <p class="plot-label">Synopsis</p>
-        <p class="plot-text" id="moviePlot">—</p>
-      </div>
-
-      <div class="result-actions">
-        <button class="btn-primary" onclick="restart()"><span>Try Again</span></button>
-        <button class="btn-ghost" onclick="restart()">Change My Vibe</button>
       </div>
     </div>
   </div>
 </section>
 
 <script>
-  const API = 'http://localhost:8000';
+  const API = 'http://localhost:8001';
   let questions = [];
   let currentQ  = 0;
   let answers   = {};
@@ -468,7 +467,31 @@
     'Almost there...',
   ];
 
-  // ── screen transitions ─────────────────────────────────────────
+  // ── server status ────────────────────────────────────────────
+  async function checkServer() {
+    const dot   = document.getElementById('statusDot');
+    const label = document.getElementById('statusLabel');
+    try {
+      await fetch(`${API}/`, { signal: AbortSignal.timeout(3000) });
+      dot.className = 'online';
+      label.textContent = 'server online';
+    } catch {
+      dot.className = 'offline';
+      label.textContent = 'server offline';
+    }
+  }
+  checkServer();
+  setInterval(checkServer, 10000);
+
+  // ── error banner ─────────────────────────────────────────────
+  function showError(msg) {
+    const el = document.getElementById('errorBanner');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 5000);
+  }
+
+  // ── screen transitions ───────────────────────────────────────
   function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => {
       if (s.classList.contains('active')) {
@@ -480,10 +503,10 @@
     setTimeout(() => document.getElementById(id).classList.add('active'), 120);
   }
 
-  // ── quiz ───────────────────────────────────────────────────────
+  // ── quiz ─────────────────────────────────────────────────────
   async function startQuiz() {
     try {
-      const res = await fetch(`${API}/quiz`);
+      const res = await fetch(`${API}/quiz`, { signal: AbortSignal.timeout(5000) });
       const data = await res.json();
       questions = data.questions;
     } catch {
@@ -506,7 +529,7 @@
 
     document.querySelectorAll('.progress-dot').forEach((d, i) => {
       d.className = 'progress-dot';
-      if (i < currentQ)  d.classList.add('done');
+      if (i < currentQ)   d.classList.add('done');
       if (i === currentQ) d.classList.add('active');
     });
 
@@ -533,54 +556,55 @@
 
     setTimeout(() => {
       currentQ++;
-      if (currentQ < questions.length) {
-        slideToNext();
-      } else {
-        fetchRec();
-      }
+      if (currentQ < questions.length) slideToNext();
+      else fetchRec();
     }, 340);
   }
 
   function slideToNext() {
-    const el = document.getElementById('quiz');
-    el.style.transition = 'opacity 0.28s ease, transform 0.28s ease';
-    el.style.opacity = '0'; el.style.transform = 'translateX(-28px)';
+    const inner = document.getElementById('quizInner');
+    inner.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+    inner.style.opacity = '0'; inner.style.transform = 'translateX(-24px)';
     setTimeout(() => {
       renderQuestion();
-      el.style.transition = 'none';
-      el.style.transform = 'translateX(28px)';
+      inner.style.transition = 'none';
+      inner.style.transform = 'translateX(24px)';
       requestAnimationFrame(() => requestAnimationFrame(() => {
-        el.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
-        el.style.opacity = '1'; el.style.transform = 'translateX(0)';
+        inner.style.transition = 'opacity 0.32s ease, transform 0.32s ease';
+        inner.style.opacity = '1'; inner.style.transform = 'translateX(0)';
       }));
-    }, 290);
+    }, 260);
   }
 
-  // ── recommendation ─────────────────────────────────────────────
+  // ── recommendation ───────────────────────────────────────────
   async function fetchRec() {
     showScreen('loading');
 
-    // Cycle loading messages
     let li = 0;
     const lt = document.getElementById('loadingText');
     const interval = setInterval(() => {
       li = (li + 1) % loadingLines.length;
       lt.style.opacity = '0';
       setTimeout(() => { lt.textContent = loadingLines[li]; lt.style.opacity = '1'; }, 250);
-    }, 1400);
+    }, 1600);
 
     try {
       const res = await fetch(`${API}/recommend`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(answers),
+        signal: AbortSignal.timeout(10000),
       });
+
+      if (!res.ok) throw new Error(`Server responded ${res.status}`);
+
       const data = await res.json();
       clearInterval(interval);
-      setTimeout(() => showResult(data), 600);
-    } catch {
+      setTimeout(() => showResult(data), 500);
+    } catch (err) {
       clearInterval(interval);
-      alert('Could not reach the API. Make sure the server is running:\n\npython -m uvicorn main:app');
+      showError('Server unreachable — make sure you ran: python -m uvicorn main:app');
+      checkServer();
       showScreen('intro');
     }
   }
@@ -589,24 +613,23 @@
     const rec  = data.recommendation;
     const vibe = data.vibe_check_result;
 
-    document.getElementById('vibePill').textContent    = `✦ ${vibe.vibe_score}  ·  ${vibe.mood}`;
-    document.getElementById('movieTitle').textContent  = rec.title;
-    document.getElementById('movieYear').textContent   = rec.year;
-    document.getElementById('pitchText').textContent   = vibe.pitch;
-    document.getElementById('imdbRating').textContent  = rec.imdb_rating;
-    document.getElementById('movieRuntime').textContent = rec.runtime;
-    document.getElementById('movieGenre').textContent  = rec.genre;
-    document.getElementById('movieRated').textContent  = rec.rated;
+    document.getElementById('vibePill').textContent      = `✦ ${vibe.vibe_score}  ·  ${vibe.mood}`;
+    document.getElementById('movieTitle').textContent    = rec.title;
+    document.getElementById('movieYear').textContent     = rec.year;
+    document.getElementById('pitchText').textContent     = vibe.pitch;
+    document.getElementById('imdbRating').textContent    = rec.imdb_rating;
+    document.getElementById('movieRuntime').textContent  = rec.runtime;
+    document.getElementById('movieGenre').textContent    = rec.genre;
+    document.getElementById('movieRated').textContent    = rec.rated;
     document.getElementById('movieDirector').textContent = rec.director;
-    document.getElementById('movieActors').textContent = rec.actors;
-    document.getElementById('moviePlot').textContent   = rec.plot;
+    document.getElementById('movieActors').textContent   = rec.actors;
+    document.getElementById('moviePlot').textContent     = rec.plot;
 
     const wrap = document.getElementById('posterWrap');
     wrap.innerHTML = '<div class="poster-glow"></div>';
     if (rec.poster && rec.poster !== 'N/A') {
       const img = document.createElement('img');
-      img.className = 'poster-img'; img.alt = rec.title;
-      img.src = rec.poster;
+      img.className = 'poster-img'; img.alt = rec.title; img.src = rec.poster;
       wrap.appendChild(img);
     } else {
       const ph = document.createElement('div');
@@ -614,14 +637,15 @@
       wrap.appendChild(ph);
     }
 
+    // scroll result back to top on each new result
+    document.querySelector('.result-scroll').scrollTop = 0;
     showScreen('result');
   }
 
   function restart() {
     currentQ = 0; answers = {};
-    // reset quiz panel transform state
-    const el = document.getElementById('quiz');
-    el.style.transition = ''; el.style.opacity = ''; el.style.transform = '';
+    const inner = document.getElementById('quizInner');
+    inner.style.transition = ''; inner.style.opacity = ''; inner.style.transform = '';
     showScreen('intro');
   }
 </script>
