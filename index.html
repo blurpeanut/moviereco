@@ -462,6 +462,7 @@
 </section>
 
 <script>
+  const OMDB_KEY = '21cd354a';
 
   // ── quiz data ─────────────────────────────────────────────────
   const QUESTIONS = [
@@ -603,7 +604,6 @@
     const title  = list[offset % list.length];
 
     try {
-      const OMDB_KEY = '21cd354a';
       const res = await fetch(
         `https://www.omdbapi.com/?t=${encodeURIComponent(title)}&plot=full&apikey=${OMDB_KEY}`,
         { signal: AbortSignal.timeout(8000) }
