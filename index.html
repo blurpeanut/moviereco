@@ -38,7 +38,6 @@
       pointer-events: none; z-index: 9999; mix-blend-mode: overlay;
     }
 
-    /* ambient glow */
     body::after {
       content: '';
       position: fixed; top: -30%; left: -15%;
@@ -61,20 +60,17 @@
     .screen.active  { opacity: 1; transform: translateY(0); pointer-events: all; }
     .screen.exit-up { opacity: 0; transform: translateY(-32px); pointer-events: none; }
 
-    /* ── server status dot ─────────────────────────────────────── */
-    #statusDot {
-      position: fixed; bottom: 1.4rem; right: 1.6rem;
-      display: flex; align-items: center; gap: 0.5rem;
-      font-family: var(--sans); font-size: 0.6rem;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--muted); z-index: 100; cursor: default;
+    /* ── error banner ──────────────────────────────────────────── */
+    #errorBanner {
+      display: none; position: fixed;
+      top: 1.5rem; left: 50%; transform: translateX(-50%);
+      background: rgba(224,82,82,0.12); border: 1px solid rgba(224,82,82,0.4);
+      color: #e05252; padding: 0.75rem 1.5rem;
+      font-family: var(--sans); font-size: 0.75rem;
+      letter-spacing: 0.05em; text-align: center;
+      z-index: 200; max-width: 90vw;
     }
-    #statusDot .dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: #555; transition: background 0.4s ease;
-    }
-    #statusDot.online .dot  { background: #4caf7d; box-shadow: 0 0 6px #4caf7d88; }
-    #statusDot.offline .dot { background: #e05252; box-shadow: 0 0 6px #e0525288; }
+    #errorBanner.show { display: block; }
 
     /* ── INTRO ─────────────────────────────────────────────────── */
     #intro { gap: 0; text-align: center; padding: 2rem; }
@@ -137,10 +133,7 @@
     }
 
     /* ── QUIZ ──────────────────────────────────────────────────── */
-    #quiz {
-      width: 100%; max-width: 720px;
-      padding: 2rem;
-    }
+    #quiz { width: 100%; max-width: 720px; padding: 2rem; }
 
     #quizInner {
       width: 100%;
@@ -230,30 +223,14 @@
       transition: opacity 0.25s ease;
     }
 
-    /* ── ERROR BANNER ──────────────────────────────────────────── */
-    #errorBanner {
-      display: none; position: fixed;
-      top: 1.5rem; left: 50%; transform: translateX(-50%);
-      background: rgba(224,82,82,0.12); border: 1px solid rgba(224,82,82,0.4);
-      color: #e05252; padding: 0.75rem 1.5rem;
-      font-family: var(--sans); font-size: 0.75rem;
-      letter-spacing: 0.05em; text-align: center;
-      z-index: 200; max-width: 90vw;
-    }
-    #errorBanner.show { display: block; }
-
     /* ── RESULT ────────────────────────────────────────────────── */
     #result { padding: 0; justify-content: stretch; align-items: stretch; }
 
     .result-scroll {
-      width: 100%; height: 100%;
-      overflow-y: auto; overflow-x: hidden;
-      display: flex; flex-direction: column;
-      align-items: center;
+      width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden;
+      display: flex; flex-direction: column; align-items: center;
       padding: 3rem 2rem 4rem;
     }
-
-    /* custom scrollbar */
     .result-scroll::-webkit-scrollbar { width: 4px; }
     .result-scroll::-webkit-scrollbar-track { background: transparent; }
     .result-scroll::-webkit-scrollbar-thumb { background: rgba(245,200,66,0.25); border-radius: 2px; }
@@ -270,7 +247,6 @@
       font-family: var(--sans); font-size: 0.72rem;
       letter-spacing: 0.08em; color: var(--gold); margin-bottom: 2.5rem;
     }
-
     .result-layout {
       display: grid; grid-template-columns: 240px 1fr;
       gap: 3rem; width: 100%; max-width: 1000px; align-items: start;
@@ -282,9 +258,7 @@
       background: radial-gradient(ellipse, rgba(245,200,66,0.22) 0%, transparent 68%);
       z-index: 0; animation: glowPulse 2.8s ease-in-out infinite alternate;
     }
-    @keyframes glowPulse {
-      from { opacity: 0.55; } to { opacity: 1; }
-    }
+    @keyframes glowPulse { from { opacity: 0.55; } to { opacity: 1; } }
     .poster-img {
       width: 100%; display: block; position: relative; z-index: 1;
       box-shadow: 0 28px 70px rgba(0,0,0,0.85), 0 0 40px rgba(245,200,66,0.12);
@@ -297,7 +271,6 @@
     }
 
     .result-info { display: flex; flex-direction: column; gap: 1.5rem; }
-
     .movie-title {
       font-family: var(--serif);
       font-size: clamp(2rem, 4vw, 3.8rem);
@@ -321,10 +294,7 @@
     }
     .meta-value { font-family: var(--serif); font-size: 0.98rem; color: var(--text); }
     .imdb-row { display: flex; align-items: baseline; gap: 0.3rem; }
-    .imdb-num {
-      font-family: var(--serif); font-size: 2rem;
-      font-weight: 600; color: var(--gold);
-    }
+    .imdb-num { font-family: var(--serif); font-size: 2rem; font-weight: 600; color: var(--gold); }
     .imdb-denom { font-family: var(--sans); font-size: 0.7rem; color: var(--muted); }
     .span-2 { grid-column: span 2; }
 
@@ -353,11 +323,7 @@
 </head>
 <body>
 
-<!-- server status indicator -->
-<div id="statusDot"><div class="dot"></div><span id="statusLabel">checking...</span></div>
-
-<!-- error banner -->
-<div id="errorBanner" id="errorBanner"></div>
+<div id="errorBanner"></div>
 
 <!-- ── INTRO ───────────────────────────────────────────────────── -->
 <section class="screen active" id="intro">
@@ -401,10 +367,8 @@
   <div class="result-scroll">
     <p class="result-eyebrow">Your vibe. Your movie.</p>
     <div class="vibe-pill" id="vibePill">✦ loading...</div>
-
     <div class="result-layout">
       <div class="poster-wrap" id="posterWrap"><div class="poster-glow"></div></div>
-
       <div class="result-info">
         <div>
           <h2 class="movie-title" id="movieTitle">—</h2>
@@ -454,12 +418,44 @@
 </section>
 
 <script>
-  const API = 'http://localhost:8001';
-  let questions = [];
-  let currentQ  = 0;
-  let answers   = {};
+  const OMDB_KEY = '21cd354a';
 
-  const loadingLines = [
+  // ── quiz data ─────────────────────────────────────────────────
+  const QUESTIONS = [
+    { id:'mood',    question:"What's your current emotional state?",  options:{a:'Need a good cry 😭',b:'Ready to laugh till it hurts 😂',c:'Edge of my seat, heart racing 😰',d:'Warm & fuzzy, feeling soft 🥰'} },
+    { id:'setting', question:'Pick a world to escape into tonight:',   options:{a:'Galaxy far, far away 🚀',b:'Rainy big city at night 🌆',c:'Small cozy town with dark secrets 🏡',d:'Historical epic or wild west 🤠'} },
+    { id:'energy',  question:'How much brain you bringing tonight?',   options:{a:'None. Zero. Full potato mode 🥔',b:'A little — I like a good story',c:'100% — hit me with the plot twists 🧠',d:'I want to FEEL things, not think'} },
+    { id:'company', question:"Who's watching with you?",               options:{a:'Just me and my snacks 🍿',b:'Date night 💑',c:'The whole squad 🎉',d:'Family / kids in the mix 👨‍👩‍👧'} },
+  ];
+
+  const RECS = {
+    'aa':['Interstellar','Gravity','Ad Astra'],
+    'ab':['Lost in Translation','Her','Collateral'],
+    'ac':['Eternal Sunshine of the Spotless Mind','Manchester by the Sea','The Lovely Bones'],
+    'ad':['Braveheart','Gladiator','The Last Samurai'],
+    'ba':['Guardians of the Galaxy','Galaxy Quest','The Hitchhikers Guide to the Galaxy'],
+    'bb':['The Grand Budapest Hotel','Crazy Stupid Love','About Time'],
+    'bc':['Knives Out','Hot Fuzz','Clue'],
+    'bd':['Blazing Saddles','Tombstone','Butch Cassidy and the Sundance Kid'],
+    'ca':['Alien','Event Horizon','Life'],
+    'cb':['Se7en','Nightcrawler','Gone Girl'],
+    'cc':['The Gift','Hereditary','Midsommar'],
+    'cd':['No Country for Old Men','There Will Be Blood','True Grit'],
+    'da':['The Martian','Wall-E','Arrival'],
+    'db':['La La Land','Before Sunrise','Midnight in Paris'],
+    'dc':['Big Fish','Little Miss Sunshine','Chocolat'],
+    'dd':['The Princess Bride','Cinema Paradiso','Dances with Wolves'],
+  };
+
+  const MOOD_LABEL = { a:'cry-worthy', b:'laugh-out-loud', c:'edge-of-your-seat', d:'heartwarming' };
+  const MOOD_PITCH = {
+    a:'Grab the tissues. This one is going to hit.',
+    b:"Get ready to ugly-laugh. We're not sorry.",
+    c:"Buckle up — this one will mess with your head in the best way.",
+    d:'Perfect for when you just want to feel something good.',
+  };
+
+  const LOADING_LINES = [
     'Scanning the archives...',
     'Consulting the film gods...',
     'Rewinding the reels...',
@@ -467,64 +463,37 @@
     'Almost there...',
   ];
 
-  // ── server status ────────────────────────────────────────────
-  async function checkServer() {
-    const dot   = document.getElementById('statusDot');
-    const label = document.getElementById('statusLabel');
-    try {
-      await fetch(`${API}/`, { signal: AbortSignal.timeout(3000) });
-      dot.className = 'online';
-      label.textContent = 'server online';
-    } catch {
-      dot.className = 'offline';
-      label.textContent = 'server offline';
-    }
-  }
-  checkServer();
-  setInterval(checkServer, 10000);
+  // ── state ─────────────────────────────────────────────────────
+  let currentQ = 0;
+  let answers  = {};
 
-  // ── error banner ─────────────────────────────────────────────
+  // ── helpers ───────────────────────────────────────────────────
   function showError(msg) {
     const el = document.getElementById('errorBanner');
-    el.textContent = msg;
-    el.classList.add('show');
+    el.textContent = msg; el.classList.add('show');
     setTimeout(() => el.classList.remove('show'), 5000);
   }
 
-  // ── screen transitions ───────────────────────────────────────
   function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => {
       if (s.classList.contains('active')) {
-        s.classList.add('exit-up');
-        s.classList.remove('active');
+        s.classList.add('exit-up'); s.classList.remove('active');
         setTimeout(() => s.classList.remove('exit-up'), 550);
       }
     });
     setTimeout(() => document.getElementById(id).classList.add('active'), 120);
   }
 
-  // ── quiz ─────────────────────────────────────────────────────
-  async function startQuiz() {
-    try {
-      const res = await fetch(`${API}/quiz`, { signal: AbortSignal.timeout(5000) });
-      const data = await res.json();
-      questions = data.questions;
-    } catch {
-      questions = [
-        { id:'mood',    question:"What's your current emotional state?",  options:{a:'Need a good cry 😭',b:'Ready to laugh till it hurts 😂',c:'Edge of my seat, heart racing 😰',d:'Warm & fuzzy, feeling soft 🥰'} },
-        { id:'setting', question:'Pick a world to escape into tonight:',   options:{a:'Galaxy far, far away 🚀',b:'Rainy big city at night 🌆',c:'Small cozy town with dark secrets 🏡',d:'Historical epic or wild west 🤠'} },
-        { id:'energy',  question:'How much brain you bringing tonight?',   options:{a:'None. Zero. Full potato mode 🥔',b:'A little — I like a good story',c:'100% — hit me with the plot twists 🧠',d:'I want to FEEL things, not think'} },
-        { id:'company', question:"Who's watching with you?",               options:{a:'Just me and my snacks 🍿',b:'Date night 💑',c:'The whole squad 🎉',d:'Family / kids in the mix 👨‍👩‍👧'} },
-      ];
-    }
+  // ── quiz ──────────────────────────────────────────────────────
+  function startQuiz() {
     currentQ = 0; answers = {};
     renderQuestion();
     showScreen('quiz');
   }
 
   function renderQuestion() {
-    const q = questions[currentQ];
-    document.getElementById('stepLabel').textContent = `Question ${currentQ + 1} of ${questions.length}`;
+    const q = QUESTIONS[currentQ];
+    document.getElementById('stepLabel').textContent = `Question ${currentQ + 1} of ${QUESTIONS.length}`;
     document.getElementById('questionText').textContent = q.question;
 
     document.querySelectorAll('.progress-dot').forEach((d, i) => {
@@ -535,13 +504,11 @@
 
     const grid = document.getElementById('optionsGrid');
     grid.innerHTML = '';
-
     Object.entries(q.options).forEach(([key, label]) => {
       const emojiRe = /\p{Emoji_Presentation}|\p{Extended_Pictographic}/gu;
       const emojis  = label.match(emojiRe) || ['🎬'];
       const text    = label.replace(emojiRe, '').trim();
-
-      const card = document.createElement('div');
+      const card    = document.createElement('div');
       card.className = 'option-card';
       card.innerHTML = `<span class="option-emoji">${emojis.join('')}</span><span class="option-label">${text}</span>`;
       card.addEventListener('click', () => pick(key, card));
@@ -552,11 +519,10 @@
   function pick(key, card) {
     document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
     card.classList.add('selected');
-    answers[questions[currentQ].id] = key;
-
+    answers[QUESTIONS[currentQ].id] = key;
     setTimeout(() => {
       currentQ++;
-      if (currentQ < questions.length) slideToNext();
+      if (currentQ < QUESTIONS.length) slideToNext();
       else fetchRec();
     }, 340);
   }
@@ -567,8 +533,7 @@
     inner.style.opacity = '0'; inner.style.transform = 'translateX(-24px)';
     setTimeout(() => {
       renderQuestion();
-      inner.style.transition = 'none';
-      inner.style.transform = 'translateX(24px)';
+      inner.style.transition = 'none'; inner.style.transform = 'translateX(24px)';
       requestAnimationFrame(() => requestAnimationFrame(() => {
         inner.style.transition = 'opacity 0.32s ease, transform 0.32s ease';
         inner.style.opacity = '1'; inner.style.transform = 'translateX(0)';
@@ -576,60 +541,62 @@
     }, 260);
   }
 
-  // ── recommendation ───────────────────────────────────────────
+  // ── recommendation ────────────────────────────────────────────
   async function fetchRec() {
     showScreen('loading');
 
     let li = 0;
     const lt = document.getElementById('loadingText');
     const interval = setInterval(() => {
-      li = (li + 1) % loadingLines.length;
+      li = (li + 1) % LOADING_LINES.length;
       lt.style.opacity = '0';
-      setTimeout(() => { lt.textContent = loadingLines[li]; lt.style.opacity = '1'; }, 250);
+      setTimeout(() => { lt.textContent = LOADING_LINES[li]; lt.style.opacity = '1'; }, 250);
     }, 1600);
 
+    // pick movie title from map
+    const key  = answers.mood + answers.setting;
+    const list = RECS[key] || ['The Shawshank Redemption','Forrest Gump','The Truman Show'];
+    const offset = ('abcd'.indexOf(answers.energy)) + ('abcd'.indexOf(answers.company));
+    const title  = list[offset % list.length];
+
     try {
-      const res = await fetch(`${API}/recommend`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(answers),
-        signal: AbortSignal.timeout(10000),
-      });
-
-      if (!res.ok) throw new Error(`Server responded ${res.status}`);
-
-      const data = await res.json();
+      const res = await fetch(
+        `https://www.omdbapi.com/?t=${encodeURIComponent(title)}&plot=full&apikey=${OMDB_KEY}`,
+        { signal: AbortSignal.timeout(8000) }
+      );
+      const movie = await res.json();
       clearInterval(interval);
-      setTimeout(() => showResult(data), 500);
+
+      if (movie.Response === 'False') throw new Error('Movie not found');
+
+      setTimeout(() => showResult(movie, answers.mood), 500);
     } catch (err) {
       clearInterval(interval);
-      showError('Server unreachable — make sure you ran: python -m uvicorn main:app');
-      checkServer();
+      showError('Could not load movie data. Check your internet connection and try again.');
       showScreen('intro');
     }
   }
 
-  function showResult(data) {
-    const rec  = data.recommendation;
-    const vibe = data.vibe_check_result;
+  function showResult(movie, mood) {
+    const score = Math.floor(Math.random() * 13) + 87;
 
-    document.getElementById('vibePill').textContent      = `✦ ${vibe.vibe_score}  ·  ${vibe.mood}`;
-    document.getElementById('movieTitle').textContent    = rec.title;
-    document.getElementById('movieYear').textContent     = rec.year;
-    document.getElementById('pitchText').textContent     = vibe.pitch;
-    document.getElementById('imdbRating').textContent    = rec.imdb_rating;
-    document.getElementById('movieRuntime').textContent  = rec.runtime;
-    document.getElementById('movieGenre').textContent    = rec.genre;
-    document.getElementById('movieRated').textContent    = rec.rated;
-    document.getElementById('movieDirector').textContent = rec.director;
-    document.getElementById('movieActors').textContent   = rec.actors;
-    document.getElementById('moviePlot').textContent     = rec.plot;
+    document.getElementById('vibePill').textContent      = `✦ ${score}% match  ·  ${MOOD_LABEL[mood]}`;
+    document.getElementById('movieTitle').textContent    = movie.Title;
+    document.getElementById('movieYear').textContent     = movie.Year;
+    document.getElementById('pitchText').textContent     = MOOD_PITCH[mood];
+    document.getElementById('imdbRating').textContent    = movie.imdbRating;
+    document.getElementById('movieRuntime').textContent  = movie.Runtime;
+    document.getElementById('movieGenre').textContent    = movie.Genre;
+    document.getElementById('movieRated').textContent    = movie.Rated;
+    document.getElementById('movieDirector').textContent = movie.Director;
+    document.getElementById('movieActors').textContent   = movie.Actors;
+    document.getElementById('moviePlot').textContent     = movie.Plot;
 
     const wrap = document.getElementById('posterWrap');
     wrap.innerHTML = '<div class="poster-glow"></div>';
-    if (rec.poster && rec.poster !== 'N/A') {
+    if (movie.Poster && movie.Poster !== 'N/A') {
       const img = document.createElement('img');
-      img.className = 'poster-img'; img.alt = rec.title; img.src = rec.poster;
+      img.className = 'poster-img'; img.alt = movie.Title; img.src = movie.Poster;
       wrap.appendChild(img);
     } else {
       const ph = document.createElement('div');
@@ -637,7 +604,6 @@
       wrap.appendChild(ph);
     }
 
-    // scroll result back to top on each new result
     document.querySelector('.result-scroll').scrollTop = 0;
     showScreen('result');
   }
