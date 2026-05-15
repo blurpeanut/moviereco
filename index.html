@@ -82,32 +82,33 @@
 
     /* ── buttons ── */
     .btn-primary {
-      font-family: var(--sans); font-size: 0.72rem; font-weight: 500;
-      letter-spacing: 0.22em; text-transform: uppercase;
+      font-family: var(--sans); font-size: 0.85rem; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--black); background: var(--gold);
-      border: none; padding: 1rem 3.2rem;
+      border: none; padding: 1.25rem 4rem;
       cursor: pointer; position: relative; overflow: hidden;
       transition: transform 0.2s ease, box-shadow 0.3s ease;
       animation: fadeUp 0.8s 0.75s both;
+      box-shadow: 0 4px 20px rgba(245,200,66,0.3);
     }
     .btn-primary::before {
       content: ''; position: absolute; inset: 0;
       background: var(--amber); transform: scaleX(0);
       transform-origin: left; transition: transform 0.3s ease;
     }
-    .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 30px var(--glow); }
+    .btn-primary:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(245,200,66,0.45); }
     .btn-primary:hover:not(:disabled)::before { transform: scaleX(1); }
     .btn-primary span { position: relative; z-index: 1; }
     .btn-primary:disabled { opacity: 0.3; cursor: not-allowed; animation: none; }
 
     .btn-ghost {
-      font-family: var(--sans); font-size: 0.72rem; font-weight: 400;
-      letter-spacing: 0.2em; text-transform: uppercase;
-      color: var(--muted); background: transparent;
-      border: 1px solid var(--border); padding: 0.85rem 2.5rem;
+      font-family: var(--sans); font-size: 0.8rem; font-weight: 500;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--text); background: transparent;
+      border: 1px solid rgba(240,237,232,0.35); padding: 1.1rem 2.8rem;
       cursor: pointer; transition: all 0.3s ease;
     }
-    .btn-ghost:hover { color: var(--gold); border-color: rgba(245,200,66,0.5); }
+    .btn-ghost:hover { color: var(--gold); border-color: rgba(245,200,66,0.6); background: rgba(245,200,66,0.06); }
     .btn-ghost.in-list { color: var(--gold); border-color: rgba(245,200,66,0.5); }
 
     @keyframes fadeUp {
@@ -167,10 +168,41 @@
 
     .comments-section {
       width: 100%; max-width: 1000px;
-      margin-top: 3rem; padding-top: 2rem;
-      border-top: 1px solid var(--border);
+      margin-top: 5rem; padding-top: 3rem;
+      border-top: 1px solid rgba(245,200,66,0.25);
     }
     #disqus_thread { color-scheme: dark; }
+
+    .nav-buttons {
+      display: flex; gap: 1.2rem; flex-wrap: wrap;
+      justify-content: center; margin-bottom: 3.5rem;
+    }
+    .nav-btn {
+      font-family: var(--sans); font-size: 0.85rem; font-weight: 500;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--text); background: var(--card);
+      border: 1px solid rgba(240,237,232,0.25); padding: 1.1rem 2.8rem;
+      cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden;
+    }
+    .nav-btn::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(245,200,66,0.1) 0%, transparent 60%);
+      opacity: 0; transition: opacity 0.25s ease;
+    }
+    .nav-btn:hover { color: var(--gold); border-color: rgba(245,200,66,0.6); transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.4); }
+    .nav-btn:hover::before { opacity: 1; }
+    .nav-btn .nav-btn-icon { margin-right: 0.6rem; }
+    .nav-section-label {
+      font-family: var(--serif); font-size: 1.5rem;
+      font-weight: 300; font-style: italic;
+      color: var(--text); text-align: center;
+      margin-bottom: 1.8rem;
+    }
+    .discussion-label {
+      font-family: var(--serif); font-size: 1.3rem;
+      font-weight: 300; font-style: italic;
+      color: var(--text); margin-bottom: 1.5rem;
+    }
 
     /* ── QUIZ ── */
     #quiz { padding: 0; justify-content: stretch; align-items: stretch; }
@@ -333,6 +365,27 @@
     .plot-text { font-family: var(--serif); font-size: 0.95rem; line-height: 1.75; color: var(--muted); font-weight: 300; }
     .result-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.5rem; }
 
+    .joke-line {
+      font-family: var(--serif); font-size: 0.88rem; font-style: italic;
+      font-weight: 300; color: var(--muted); line-height: 1.4;
+      margin-top: 0.2rem;
+    }
+    .joke-line.joke-loading { animation: pulse 1.4s ease-in-out infinite; }
+    @keyframes pulse { 0%,100% { opacity: 0.25; } 50% { opacity: 0.6; } }
+
+    .vibe-summary-card {
+      width: 100%; max-width: 1100px;
+      border: 1px solid rgba(245,200,66,0.25); background: rgba(245,200,66,0.04);
+      padding: 1.1rem 1.6rem; margin-bottom: 2rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .vibe-summary-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .vibe-summary-text {
+      font-family: var(--serif); font-size: 1rem; font-style: italic;
+      font-weight: 300; color: var(--text); line-height: 1.5;
+    }
+    .vibe-summary-text.loading { color: var(--muted); animation: pulse 1.4s ease-in-out infinite; }
+
     /* ── WATCHLIST PAGE ── */
     #watchlist { padding: 0; justify-content: stretch; align-items: stretch; }
     .wl-scroll { padding: 3rem 2rem 5rem; }
@@ -445,6 +498,47 @@
     .wl-card-btn.remove-btn:hover { color: #e05252; }
     .wl-card.watched .watch-btn { color: rgba(245,200,66,0.6); }
 
+    /* ── alternatives ── */
+    .alt-section {
+      width: 100%; max-width: 1000px;
+      margin-top: 2.5rem; padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .alt-label {
+      font-family: var(--sans); font-size: 0.6rem;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: rgba(245,200,66,0.45); margin-bottom: 1.2rem;
+    }
+    .alt-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
+    }
+    .alt-card {
+      cursor: pointer; display: flex; flex-direction: column; gap: 0.6rem;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+    .alt-card:hover { transform: translateY(-3px); }
+    .alt-card:hover .alt-poster { border-color: rgba(245,200,66,0.5); }
+    .alt-poster {
+      width: 100%; aspect-ratio: 2/3; object-fit: cover;
+      border: 1px solid var(--border); display: block;
+      transition: border-color 0.2s ease;
+    }
+    .alt-poster-ph {
+      width: 100%; aspect-ratio: 2/3; background: var(--card);
+      border: 1px solid var(--border); display: flex;
+      align-items: center; justify-content: center;
+      font-size: 2rem; transition: border-color 0.2s ease;
+    }
+    .alt-title {
+      font-family: var(--serif); font-size: 0.92rem;
+      font-weight: 400; line-height: 1.3; color: var(--text);
+    }
+    .alt-year {
+      font-family: var(--sans); font-size: 0.6rem;
+      color: var(--muted); letter-spacing: 0.05em;
+    }
+    .alt-card.loading { opacity: 0.4; pointer-events: none; }
+
     /* ── responsive ── */
     @media (max-width: 860px) {
       .quiz-all-grid { grid-template-columns: 1fr; }
@@ -466,19 +560,25 @@
 <section class="screen active" id="intro">
   <div class="page-scroll intro-scroll">
     <div class="intro-hero">
-      <p class="intro-eyebrow">A cinematic experience</p>
-      <h1 class="intro-title">Vibe<br><span class="gold">Check</span></h1>
+      <p class="intro-eyebrow">A movie recommendation</p>
+      <h1 class="intro-title">Stop Scrolling<br><span class="gold">Start Watching</span></h1>
       <div class="intro-rule"></div>
-      <p class="intro-sub">Four questions. One perfect movie. No spoilers.</p>
+      <p class="intro-sub">by Fresh Vibes Inc.</p>
       <div class="intro-cta-row">
-        <button class="btn-primary" onclick="startQuiz()"><span>Begin the Check</span></button>
-        <button class="watchlist-link hidden" id="watchlistLink" onclick="openWatchlist()">
-          My Watchlist <span class="watchlist-badge" id="watchlistBadge">0</span>
-        </button>
+        <button class="btn-primary" onclick="startQuiz()"><span>Start Here</span></button>
       </div>
     </div>
     <div class="comments-section">
-      <p class="plot-label" style="margin-bottom:1.5rem;">Discussion</p>
+      <p class="nav-section-label">Where to next?</p>
+      <div class="nav-buttons">
+        <button class="nav-btn" onclick="startQuiz()">
+          <span class="nav-btn-icon">🎬</span>Find My Movie
+        </button>
+        <button class="nav-btn" id="navWatchlistBtn" onclick="openWatchlist()">
+          <span class="nav-btn-icon">★</span>My Watchlist
+        </button>
+      </div>
+      <p class="discussion-label">Discussion</p>
       <div id="disqus_thread"></div>
     </div>
   </div>
@@ -522,6 +622,7 @@
         <div>
           <h2 class="movie-title" id="movieTitle">—</h2>
           <p class="movie-year" id="movieYear">—</p>
+          <p class="joke-line joke-loading" id="jokeText">...</p>
         </div>
         <p class="pitch" id="pitchText">—</p>
         <div class="meta-grid">
@@ -558,11 +659,15 @@
           <p class="plot-text" id="moviePlot">—</p>
         </div>
         <div class="result-actions">
-          <button class="btn-primary" onclick="restart()"><span>Try Again</span></button>
           <button class="btn-ghost" id="watchlistBtn" onclick="toggleWatchlist()">+ Watchlist</button>
+          <button class="btn-ghost" id="watchedBtn" onclick="toggleWatched()">✓ Already Watched</button>
           <button class="btn-ghost" onclick="restart()">Change My Vibe</button>
         </div>
       </div>
+    </div>
+    <div class="alt-section" id="altSection" style="display:none;">
+      <p class="alt-label">Not feeling it? Try these instead</p>
+      <div class="alt-grid" id="altGrid"></div>
     </div>
   </div>
 </section>
@@ -582,12 +687,15 @@
         <button class="wl-filter" data-filter="watched" onclick="setFilter('watched')">Watched</button>
       </div>
     </div>
+    <div class="vibe-summary-card" id="vibeSummaryCard" style="display:none;">
+      <span class="vibe-summary-icon">✦</span>
+      <p class="vibe-summary-text" id="vibeSummaryText"></p>
+    </div>
     <div id="wlContent" style="width:100%;max-width:1100px;"></div>
   </div>
 </section>
 
 <script>
-  const OMDB_KEY = '21cd354a';
 
   const QUESTIONS = [
     { id:'mood',    question:"What's your current emotional state?",  options:{a:'Need a good cry 😭',b:'Ready to laugh till it hurts 😂',c:'Edge of my seat, heart racing 😰',d:'Warm & fuzzy, feeling soft 🥰'} },
@@ -632,6 +740,7 @@
   let currentMovie = null;
   let activeFilter = 'all';
   let wlReturnScreen = 'intro';
+  let altTitles = [];
 
   // ── helpers
   function showError(msg) {
@@ -708,11 +817,13 @@
     const key    = answers.mood + answers.setting;
     const list   = RECS[key] || ['The Shawshank Redemption','Forrest Gump','The Truman Show'];
     const offset = ('abcd'.indexOf(answers.energy)) + ('abcd'.indexOf(answers.company));
-    const title  = list[offset % list.length];
+    const picked = offset % list.length;
+    const title  = list[picked];
+    altTitles    = list.filter((_, i) => i !== picked);
 
     try {
       const res = await fetch(
-        `https://www.omdbapi.com/?t=${encodeURIComponent(title)}&plot=full&apikey=${OMDB_KEY}`,
+        `/api/movie?t=${encodeURIComponent(title)}`,
         { signal: AbortSignal.timeout(8000) }
       );
       const movie = await res.json();
@@ -755,13 +866,66 @@
       wrap.appendChild(ph);
     }
 
-    const inList = getWatchlist().some(m => m.title === movie.Title);
+    const list    = getWatchlist();
+    const entry   = list.find(m => m.title === movie.Title);
+    const inList  = !!entry;
+    const watched = entry?.watched || false;
+
     const btn = document.getElementById('watchlistBtn');
     btn.textContent = inList ? '✓ In Watchlist' : '+ Watchlist';
     btn.classList.toggle('in-list', inList);
 
+    const wBtn = document.getElementById('watchedBtn');
+    wBtn.textContent = watched ? '✓ Watched' : '✓ Already Watched';
+    wBtn.classList.toggle('in-list', watched);
+
     document.querySelector('.result-scroll').scrollTop = 0;
     showScreen('result');
+    fetchJoke(movie, mood);
+    fetchAlternatives(altTitles);
+  }
+
+  async function fetchAlternatives(titles) {
+    const section = document.getElementById('altSection');
+    const grid    = document.getElementById('altGrid');
+    if (!titles.length) { section.style.display = 'none'; return; }
+
+    section.style.display = 'block';
+    grid.innerHTML = titles.map(t =>
+      `<div class="alt-card loading" id="alt-${t.replace(/\s/g,'-')}">
+        <div class="alt-poster-ph">🎬</div>
+        <div class="alt-title">${t}</div>
+      </div>`
+    ).join('');
+
+    titles.forEach(async (t) => {
+      try {
+        const res = await fetch(
+          `/api/movie?t=${encodeURIComponent(t)}`,
+          { signal: AbortSignal.timeout(8000) }
+        );
+        const movie = await res.json();
+        const card  = document.getElementById(`alt-${t.replace(/\s/g,'-')}`);
+        if (!card) return;
+        const posterHTML = (movie.Poster && movie.Poster !== 'N/A')
+          ? `<img class="alt-poster" src="${movie.Poster}" alt="${movie.Title}">`
+          : `<div class="alt-poster-ph">🎬</div>`;
+        card.innerHTML = `
+          ${posterHTML}
+          <div class="alt-title">${movie.Title || t}</div>
+          <div class="alt-year">${movie.Year || ''}</div>`;
+        card.classList.remove('loading');
+        card.addEventListener('click', () => selectAlternative(movie));
+      } catch {}
+    });
+  }
+
+  function selectAlternative(movie) {
+    const prevTitle = currentMovie?.Title;
+    const newAlts   = altTitles.filter(t => t !== movie.Title);
+    if (prevTitle) newAlts.push(prevTitle);
+    altTitles = newAlts;
+    showResult(movie, answers.mood);
   }
 
   function restart() {
@@ -806,6 +970,36 @@
     updateWatchlistLink();
   }
 
+  function toggleWatched() {
+    if (!currentMovie) return;
+    const list  = getWatchlist();
+    const idx   = list.findIndex(m => m.title === currentMovie.Title);
+    const wBtn  = document.getElementById('watchedBtn');
+    const wlBtn = document.getElementById('watchlistBtn');
+
+    if (idx === -1) {
+      list.push({
+        title:   currentMovie.Title,
+        year:    currentMovie.Year,
+        genre:   currentMovie.Genre,
+        rating:  currentMovie.imdbRating,
+        poster:  currentMovie.Poster,
+        watched: true,
+      });
+      wlBtn.textContent = '✓ In Watchlist';
+      wlBtn.classList.add('in-list');
+    } else {
+      list[idx].watched = !list[idx].watched;
+    }
+
+    const isWatched = idx === -1 ? true : list[idx].watched;
+    wBtn.textContent = isWatched ? '✓ Watched' : '✓ Already Watched';
+    wBtn.classList.toggle('in-list', isWatched);
+
+    saveWatchlist(list);
+    updateWatchlistLink();
+  }
+
   // ── watchlist page
   function openWatchlist() {
     const activeId = document.querySelector('.screen.active')?.id || 'intro';
@@ -813,6 +1007,7 @@
     activeFilter = 'all';
     renderWatchlistPage();
     showScreen('watchlist');
+    fetchVibeSummary(getWatchlist());
   }
 
   function closeWatchlist() {
@@ -906,12 +1101,65 @@
     container.appendChild(grid);
   }
 
-  function updateWatchlistLink() {
-    const count = getWatchlist().length;
-    const link  = document.getElementById('watchlistLink');
-    const badge = document.getElementById('watchlistBadge');
-    link.classList.toggle('hidden', count === 0);
-    badge.textContent = count;
+  function updateWatchlistLink() {}
+
+  // ── AI helpers
+  async function fetchJoke(movie, mood) {
+    const jokeEl = document.getElementById('jokeText');
+    jokeEl.textContent = '...';
+    jokeEl.classList.add('joke-loading');
+    try {
+      const res = await fetch('/api/ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'joke',
+          data: {
+            movieTitle: movie.Title,
+            genre: movie.Genre,
+            year: movie.Year,
+            moodLabel: MOOD_LABEL[mood],
+          },
+        }),
+      });
+      const { text } = await res.json();
+      jokeEl.textContent = text || '';
+    } catch {
+      jokeEl.textContent = '';
+    }
+    jokeEl.classList.remove('joke-loading');
+  }
+
+  async function fetchVibeSummary(movies) {
+    const card = document.getElementById('vibeSummaryCard');
+    const textEl = document.getElementById('vibeSummaryText');
+    if (movies.length === 0) { card.style.display = 'none'; return; }
+    card.style.display = 'flex';
+    textEl.textContent = 'Reading your vibe...';
+    textEl.classList.add('loading');
+    try {
+      const res = await fetch('/api/ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'watchlist',
+          data: {
+            movies: movies.map(m => ({
+              title:   m.title,
+              year:    m.year,
+              genre:   m.genre,
+              rating:  m.rating,
+              watched: m.watched,
+            })),
+          },
+        }),
+      });
+      const { text } = await res.json();
+      textEl.textContent = text || 'A person of eclectic taste.';
+    } catch {
+      textEl.textContent = 'Your taste defies description.';
+    }
+    textEl.classList.remove('loading');
   }
 
   // init
