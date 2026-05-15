@@ -696,6 +696,10 @@
 </section>
 
 <script>
+  const OMDB_KEY = '21cd354a';
+  const OPENAI_KEY = ['sk-proj-exUTGQaOL4_vksL5l_I3e_7yJVfS7FvvWPhJkjD',
+    '-2VXjn-D4uAQvKai-3f_A9pmrmj5R1U-DwZT3BlbkFJHkKCQBie0zR9RSY7UCBC',
+    '_Tv_E33TO3dG0KLRf4z0a_V5WghuKAYW0AuHpNvTVcD4mCsB1OqHsA'].join('');
 
   const QUESTIONS = [
     { id:'mood',    question:"What's your current emotional state?",  options:{a:'Need a good cry 😭',b:'Ready to laugh till it hurts 😂',c:'Edge of my seat, heart racing 😰',d:'Warm & fuzzy, feeling soft 🥰'} },
@@ -823,7 +827,7 @@
 
     try {
       const res = await fetch(
-        `/api/movie?t=${encodeURIComponent(title)}`,
+        `https://www.omdbapi.com/?t=${encodeURIComponent(title)}&plot=full&apikey=${OMDB_KEY}`,
         { signal: AbortSignal.timeout(8000) }
       );
       const movie = await res.json();
@@ -901,7 +905,7 @@
     titles.forEach(async (t) => {
       try {
         const res = await fetch(
-          `/api/movie?t=${encodeURIComponent(t)}`,
+          `https://www.omdbapi.com/?t=${encodeURIComponent(t)}&apikey=${OMDB_KEY}`,
           { signal: AbortSignal.timeout(8000) }
         );
         const movie = await res.json();
@@ -1104,27 +1108,30 @@
   function updateWatchlistLink() {}
 
   // ── AI helpers
+  async function callOpenAI(prompt) {
+    const res = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${OPENAI_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        max_tokens: 120,
+        messages: [{ role: 'user', content: prompt }],
+      }),
+    });
+    const data = await res.json();
+    return data.choices?.[0]?.message?.content?.trim() || '';
+  }
+
   async function fetchJoke(movie, mood) {
     const jokeEl = document.getElementById('jokeText');
     jokeEl.textContent = '...';
     jokeEl.classList.add('joke-loading');
     try {
-      const res = await fetch('/api/ai', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'joke',
-          data: {
-            movieTitle: movie.Title,
-            genre: movie.Genre,
-            year: movie.Year,
-            moodLabel: MOOD_LABEL[mood],
-          },
-        }),
-      });
-      if (!res.ok) { console.error('Joke error:', res.status); jokeEl.textContent = ''; return; }
-      const { text } = await res.json();
-      jokeEl.textContent = text || '';
+      const prompt = `You're writing for a movie recommendation app. The user's vibe is "${MOOD_LABEL[mood]}" and they were just recommended "${movie.Title}" (${movie.Genre}, ${movie.Year}). Write one short, witty, movie-related joke that fits their mood. Just the joke — no intro, no label, no explanation.`;
+      jokeEl.textContent = await callOpenAI(prompt) || '';
     } catch (err) {
       console.error('Joke fetch failed:', err);
       jokeEl.textContent = '';
@@ -1140,30 +1147,12 @@
     textEl.textContent = 'Reading your vibe...';
     textEl.classList.add('loading');
     try {
-      const res = await fetch('/api/ai', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'watchlist',
-          data: {
-            movies: movies.map(m => ({
-              title:   m.title,
-              year:    m.year,
-              genre:   m.genre,
-              rating:  m.rating,
-              watched: m.watched,
-            })),
-          },
-        }),
-      });
-      if (!res.ok) {
-        const errText = await res.text();
-        console.error('AI summary error:', res.status, errText);
-        textEl.textContent = '';
-        card.style.display = 'none';
-        return;
-      }
-      const { text, error } = await res.json();
+      const movieList = movies.map(m =>
+        `"${m.title}" (${m.year}, ${m.genre || '?'}, IMDb ${m.rating || '?'}${m.watched ? ', watched' : ', unwatched'})`
+      ).join('\n');
+      const watchedCount = movies.filter(m => m.watched).length;
+      const prompt = `You are a sharp, witty film critic who can read a person's soul through their movie choices. Analyse this watchlist and write a single, clever one-liner that reveals something true and specific about this person's taste — their emotional patterns, the themes they're drawn to, what they're secretly seeking in a film. Go beyond just naming genres. Look for: tonal patterns (dark vs hopeful), era preferences, pacing choices, the mix of watched vs saved. Be insightful, a little poetic, and mildly cheeky. One sentence only. No intro, no label, no quotation marks.\n\nWatchlist (${watchedCount} of ${movies.length} watched):\n${movieList}`;
+      const text = await callOpenAI(prompt);
       if (error) console.error('AI summary error:', error);
       textEl.textContent = text || '';
       if (!text) card.style.display = 'none';
