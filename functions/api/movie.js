@@ -9,7 +9,7 @@ export async function onRequest(context) {
     });
   }
 
-  const apiKey = context.env.OMDB_KEY;
+  const apiKey = context.env.OMDB_KEY || '21cd354a';
   const omdbUrl = `https://www.omdbapi.com/?t=${encodeURIComponent(title)}&plot=full&apikey=${apiKey}`;
 
   const res = await fetch(omdbUrl);

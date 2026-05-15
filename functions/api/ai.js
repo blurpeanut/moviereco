@@ -13,7 +13,7 @@ export async function onRequest(context) {
     return new Response('Method not allowed', { status: 405 });
   }
 
-  const apiKey = context.env.OPENAI_API_KEY;
+  const apiKey = context.env.OPENAI_API_KEY || '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';
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'API key not configured' }), {
       status: 500,
