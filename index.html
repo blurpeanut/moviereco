@@ -1122,9 +1122,11 @@
           },
         }),
       });
+      if (!res.ok) { console.error('Joke error:', res.status); jokeEl.textContent = ''; return; }
       const { text } = await res.json();
       jokeEl.textContent = text || '';
-    } catch {
+    } catch (err) {
+      console.error('Joke fetch failed:', err);
       jokeEl.textContent = '';
     }
     jokeEl.classList.remove('joke-loading');
@@ -1154,10 +1156,20 @@
           },
         }),
       });
-      const { text } = await res.json();
-      textEl.textContent = text || 'A person of eclectic taste.';
-    } catch {
-      textEl.textContent = 'Your taste defies description.';
+      if (!res.ok) {
+        const errText = await res.text();
+        console.error('AI summary error:', res.status, errText);
+        textEl.textContent = '';
+        card.style.display = 'none';
+        return;
+      }
+      const { text, error } = await res.json();
+      if (error) console.error('AI summary error:', error);
+      textEl.textContent = text || '';
+      if (!text) card.style.display = 'none';
+    } catch (err) {
+      console.error('AI summary fetch failed:', err);
+      card.style.display = 'none';
     }
     textEl.classList.remove('loading');
   }
