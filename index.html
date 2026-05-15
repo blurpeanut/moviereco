@@ -30,26 +30,20 @@
 
     html, body {
       width: 100%; height: 100%;
-      background: var(--black);
-      color: var(--text);
-      font-family: var(--sans);
-      overflow: hidden;
+      background: var(--black); color: var(--text);
+      font-family: var(--sans); overflow: hidden;
     }
 
     body::before {
-      content: '';
-      position: fixed; inset: 0;
+      content: ''; position: fixed; inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
       pointer-events: none; z-index: 9999; mix-blend-mode: overlay;
     }
-
     body::after {
-      content: '';
-      position: fixed; top: -30%; left: -15%;
+      content: ''; position: fixed; top: -30%; left: -15%;
       width: 55%; height: 75%;
       background: radial-gradient(ellipse, rgba(var(--vibe-r),var(--vibe-g),var(--vibe-b),0.07) 0%, transparent 65%);
-      pointer-events: none; z-index: 0;
-      transition: background 1.2s ease;
+      pointer-events: none; z-index: 0; transition: background 1.2s ease;
     }
 
     /* ── screens ── */
@@ -57,8 +51,7 @@
       position: fixed; inset: 0;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      opacity: 0; transform: translateY(28px);
-      pointer-events: none;
+      opacity: 0; transform: translateY(28px); pointer-events: none;
       transition: opacity 0.5s cubic-bezier(0.4,0,0.2,1),
                   transform 0.5s cubic-bezier(0.4,0,0.2,1);
       z-index: 10;
@@ -78,47 +71,14 @@
     }
     #errorBanner.show { display: block; }
 
-    /* ── INTRO ── */
-    #intro { padding: 0; justify-content: stretch; align-items: stretch; }
-
-    .intro-scroll {
+    /* ── shared scroll container ── */
+    .page-scroll {
       width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden;
       display: flex; flex-direction: column; align-items: center;
-      padding: 0 2rem 4rem;
     }
-    .intro-scroll::-webkit-scrollbar { width: 4px; }
-    .intro-scroll::-webkit-scrollbar-track { background: transparent; }
-    .intro-scroll::-webkit-scrollbar-thumb { background: rgba(245,200,66,0.25); border-radius: 2px; }
-
-    .intro-hero {
-      min-height: 100vh; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; text-align: center;
-      width: 100%;
-    }
-
-    .intro-eyebrow {
-      font-family: var(--sans); font-size: 0.65rem;
-      font-weight: 500; letter-spacing: 0.4em; text-transform: uppercase;
-      color: var(--gold); margin-bottom: 1.25rem;
-      animation: fadeUp 0.8s 0.2s both;
-    }
-    .intro-title {
-      font-family: var(--serif); font-weight: 300; font-style: italic;
-      font-size: clamp(5rem, 15vw, 12rem);
-      line-height: 0.88; letter-spacing: -0.02em;
-      animation: fadeUp 0.8s 0.35s both;
-    }
-    .intro-title .gold { color: var(--gold); }
-    .intro-rule {
-      width: 60px; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      margin: 1.6rem auto; animation: fadeUp 0.8s 0.5s both;
-    }
-    .intro-sub {
-      font-family: var(--serif); font-size: clamp(0.95rem, 2vw, 1.3rem);
-      font-weight: 300; font-style: italic; color: var(--muted);
-      margin-bottom: 3rem; animation: fadeUp 0.8s 0.6s both;
-    }
+    .page-scroll::-webkit-scrollbar { width: 4px; }
+    .page-scroll::-webkit-scrollbar-track { background: transparent; }
+    .page-scroll::-webkit-scrollbar-thumb { background: rgba(245,200,66,0.25); border-radius: 2px; }
 
     /* ── buttons ── */
     .btn-primary {
@@ -155,17 +115,66 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── QUIZ (all questions at once) ── */
-    #quiz { padding: 0; justify-content: stretch; align-items: stretch; }
+    /* ── INTRO ── */
+    #intro { padding: 0; justify-content: stretch; align-items: stretch; }
 
-    .quiz-scroll {
-      width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden;
-      display: flex; flex-direction: column; align-items: center;
-      padding: 3rem 2rem 4rem;
+    .intro-scroll { padding: 0 2rem 4rem; }
+
+    .intro-hero {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center; width: 100%;
     }
-    .quiz-scroll::-webkit-scrollbar { width: 4px; }
-    .quiz-scroll::-webkit-scrollbar-track { background: transparent; }
-    .quiz-scroll::-webkit-scrollbar-thumb { background: rgba(245,200,66,0.25); border-radius: 2px; }
+    .intro-eyebrow {
+      font-family: var(--sans); font-size: 0.65rem; font-weight: 500;
+      letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1.25rem; animation: fadeUp 0.8s 0.2s both;
+    }
+    .intro-title {
+      font-family: var(--serif); font-weight: 300; font-style: italic;
+      font-size: clamp(5rem, 15vw, 12rem);
+      line-height: 0.88; letter-spacing: -0.02em; animation: fadeUp 0.8s 0.35s both;
+    }
+    .intro-title .gold { color: var(--gold); }
+    .intro-rule {
+      width: 60px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 1.6rem auto; animation: fadeUp 0.8s 0.5s both;
+    }
+    .intro-sub {
+      font-family: var(--serif); font-size: clamp(0.95rem, 2vw, 1.3rem);
+      font-weight: 300; font-style: italic; color: var(--muted);
+      margin-bottom: 3rem; animation: fadeUp 0.8s 0.6s both;
+    }
+    .intro-cta-row {
+      display: flex; flex-direction: column; align-items: center; gap: 1.2rem;
+      animation: fadeUp 0.8s 0.75s both;
+    }
+    .intro-cta-row .btn-primary { animation: none; }
+    .watchlist-link {
+      font-family: var(--sans); font-size: 0.62rem;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--muted); background: none; border: none;
+      cursor: pointer; transition: color 0.2s ease;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .watchlist-link:hover { color: var(--gold); }
+    .watchlist-link.hidden { visibility: hidden; pointer-events: none; }
+    .watchlist-badge {
+      background: var(--gold); color: var(--black);
+      font-size: 0.55rem; font-weight: 600;
+      padding: 0.15rem 0.45rem; border-radius: 20px; line-height: 1.4;
+    }
+
+    .comments-section {
+      width: 100%; max-width: 1000px;
+      margin-top: 3rem; padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    #disqus_thread { color-scheme: dark; }
+
+    /* ── QUIZ ── */
+    #quiz { padding: 0; justify-content: stretch; align-items: stretch; }
+    .quiz-scroll { padding: 3rem 2rem 4rem; }
 
     .quiz-all-header {
       width: 100%; max-width: 1100px;
@@ -180,15 +189,12 @@
       font-family: var(--sans); font-size: 0.62rem;
       letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted);
     }
-
     .quiz-all-grid {
       display: grid; grid-template-columns: 1fr 1fr;
       gap: 1.5rem; width: 100%; max-width: 1100px;
     }
-
     .quiz-block {
-      background: var(--card); border: 1px solid var(--border);
-      padding: 1.6rem 1.4rem;
+      background: var(--card); border: 1px solid var(--border); padding: 1.6rem 1.4rem;
     }
     .quiz-block-num {
       font-family: var(--sans); font-size: 0.55rem;
@@ -203,18 +209,12 @@
     .quiz-block .option-card { padding: 0.85rem 0.65rem; gap: 0.35rem; }
     .quiz-block .option-emoji { font-size: 1.5rem; }
     .quiz-block .option-label { font-size: 0.82rem; }
-
     .quiz-submit-row {
       width: 100%; max-width: 1100px;
-      display: flex; justify-content: center;
-      margin-top: 2rem;
+      display: flex; justify-content: center; margin-top: 2rem;
     }
 
-    /* ── option cards ── */
-    .options-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 0.9rem; width: 100%;
-    }
+    .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; width: 100%; }
     .option-card {
       background: var(--card); border: 1px solid var(--border);
       padding: 1.8rem 1.4rem; cursor: pointer;
@@ -236,18 +236,13 @@
     }
     .option-card.selected::after {
       content: '✓'; position: absolute; top: 0.45rem; right: 0.6rem;
-      font-size: 0.6rem; color: var(--gold);
-      font-family: var(--sans); font-weight: 500;
+      font-size: 0.6rem; color: var(--gold); font-family: var(--sans); font-weight: 500;
     }
     .option-emoji { font-size: 2.2rem; line-height: 1; }
-    .option-label {
-      font-family: var(--serif); font-size: 1rem;
-      font-weight: 400; color: var(--text); line-height: 1.3;
-    }
+    .option-label { font-family: var(--serif); font-size: 1rem; font-weight: 400; color: var(--text); line-height: 1.3; }
 
     /* ── LOADING ── */
     #loading { gap: 2.5rem; text-align: center; }
-
     .film-strip { display: flex; gap: 5px; align-items: center; }
     .film-frame {
       width: 10px; height: 14px; background: var(--gold);
@@ -267,21 +262,12 @@
     }
     .loading-text {
       font-family: var(--serif); font-size: 1.2rem;
-      font-style: italic; color: var(--muted);
-      transition: opacity 0.25s ease;
+      font-style: italic; color: var(--muted); transition: opacity 0.25s ease;
     }
 
     /* ── RESULT ── */
     #result { padding: 0; justify-content: stretch; align-items: stretch; }
-
-    .result-scroll {
-      width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden;
-      display: flex; flex-direction: column; align-items: center;
-      padding: 3rem 2rem 4rem;
-    }
-    .result-scroll::-webkit-scrollbar { width: 4px; }
-    .result-scroll::-webkit-scrollbar-track { background: transparent; }
-    .result-scroll::-webkit-scrollbar-thumb { background: rgba(245,200,66,0.25); border-radius: 2px; }
+    .result-scroll { padding: 3rem 2rem 4rem; }
 
     .result-eyebrow {
       font-family: var(--sans); font-size: 0.62rem;
@@ -292,24 +278,19 @@
       display: inline-flex; align-items: center; gap: 0.6rem;
       background: rgba(var(--vibe-r),var(--vibe-g),var(--vibe-b),0.12);
       border: 1px solid rgba(var(--vibe-r),var(--vibe-g),var(--vibe-b),0.35);
-      padding: 0.4rem 1.3rem;
-      font-family: var(--sans); font-size: 0.72rem;
-      letter-spacing: 0.08em;
-      color: rgb(var(--vibe-r),var(--vibe-g),var(--vibe-b));
-      margin-bottom: 2.5rem;
-      transition: all 1.2s ease;
+      padding: 0.4rem 1.3rem; font-family: var(--sans); font-size: 0.72rem;
+      letter-spacing: 0.08em; color: rgb(var(--vibe-r),var(--vibe-g),var(--vibe-b));
+      margin-bottom: 2.5rem; transition: all 1.2s ease;
     }
     .result-layout {
       display: grid; grid-template-columns: 240px 1fr;
       gap: 3rem; width: 100%; max-width: 1000px; align-items: start;
     }
-
     .poster-wrap { position: relative; }
     .poster-glow {
       position: absolute; inset: -24px;
       background: radial-gradient(ellipse, rgba(var(--vibe-r),var(--vibe-g),var(--vibe-b),0.28) 0%, transparent 68%);
-      z-index: 0; animation: glowPulse 2.8s ease-in-out infinite alternate;
-      transition: background 1.2s ease;
+      z-index: 0; animation: glowPulse 2.8s ease-in-out infinite alternate; transition: background 1.2s ease;
     }
     @keyframes glowPulse { from { opacity: 0.55; } to { opacity: 1; } }
     .poster-img {
@@ -319,113 +300,161 @@
     .poster-missing {
       width: 100%; aspect-ratio: 2/3; background: var(--card);
       border: 1px solid var(--border); display: flex;
-      align-items: center; justify-content: center;
-      font-size: 4rem; position: relative; z-index: 1;
+      align-items: center; justify-content: center; font-size: 4rem; position: relative; z-index: 1;
     }
-
     .result-info { display: flex; flex-direction: column; gap: 1.5rem; }
     .movie-title {
-      font-family: var(--serif);
-      font-size: clamp(2rem, 4vw, 3.8rem);
+      font-family: var(--serif); font-size: clamp(2rem, 4vw, 3.8rem);
       font-weight: 300; line-height: 1.0; letter-spacing: -0.015em;
     }
-    .movie-year {
-      font-family: var(--serif); font-size: 1rem;
-      font-style: italic; color: var(--gold); margin-top: 0.3rem;
-    }
+    .movie-year { font-family: var(--serif); font-size: 1rem; font-style: italic; color: var(--gold); margin-top: 0.3rem; }
     .pitch {
-      font-family: var(--serif); font-size: 1.15rem;
-      font-style: italic; font-weight: 300; color: var(--muted);
+      font-family: var(--serif); font-size: 1.15rem; font-style: italic;
+      font-weight: 300; color: var(--muted);
       border-left: 2px solid var(--gold); padding-left: 1.2rem; line-height: 1.55;
     }
     .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     .meta-item { display: flex; flex-direction: column; gap: 0.3rem; }
     .meta-label {
       font-family: var(--sans); font-size: 0.58rem;
-      letter-spacing: 0.28em; text-transform: uppercase;
-      color: rgba(245,200,66,0.55);
+      letter-spacing: 0.28em; text-transform: uppercase; color: rgba(245,200,66,0.55);
     }
     .meta-value { font-family: var(--serif); font-size: 0.98rem; color: var(--text); }
     .imdb-row { display: flex; align-items: baseline; gap: 0.3rem; }
     .imdb-num { font-family: var(--serif); font-size: 2rem; font-weight: 600; color: var(--gold); }
     .imdb-denom { font-family: var(--sans); font-size: 0.7rem; color: var(--muted); }
     .span-2 { grid-column: span 2; }
-
     .plot-block { border-top: 1px solid var(--border); padding-top: 1.4rem; }
     .plot-label {
       font-family: var(--sans); font-size: 0.58rem;
       letter-spacing: 0.28em; text-transform: uppercase;
       color: rgba(245,200,66,0.55); margin-bottom: 0.65rem;
     }
-    .plot-text {
-      font-family: var(--serif); font-size: 0.95rem;
-      line-height: 1.75; color: var(--muted); font-weight: 300;
-    }
+    .plot-text { font-family: var(--serif); font-size: 0.95rem; line-height: 1.75; color: var(--muted); font-weight: 300; }
     .result-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.5rem; }
 
-    /* ── WATCHLIST ── */
-    .watchlist-section {
-      width: 100%; max-width: 1000px;
-      margin-top: 3rem; padding-top: 2rem;
-      border-top: 1px solid var(--border);
-    }
-    .watchlist-section.hidden { display: none; }
-    .watchlist-list { display: flex; flex-direction: column; gap: 0.65rem; margin-top: 1.2rem; }
-    .watchlist-item {
-      display: flex; align-items: center; gap: 1.1rem;
-      background: var(--card); border: 1px solid var(--border);
-      padding: 0.8rem 1.1rem;
-      transition: border-color 0.2s ease;
-    }
-    .watchlist-item:hover { border-color: rgba(245,200,66,0.3); }
-    .watchlist-poster {
-      width: 34px; height: 50px; object-fit: cover; flex-shrink: 0;
-      border: 1px solid var(--border);
-    }
-    .watchlist-poster-ph {
-      width: 34px; height: 50px; flex-shrink: 0;
-      background: rgba(245,200,66,0.06); border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center; font-size: 0.9rem;
-    }
-    .watchlist-info { flex: 1; min-width: 0; }
-    .watchlist-title {
-      font-family: var(--serif); font-size: 1rem;
-      color: var(--text); white-space: nowrap;
-      overflow: hidden; text-overflow: ellipsis;
-    }
-    .watchlist-meta {
-      font-family: var(--sans); font-size: 0.62rem;
-      color: var(--muted); margin-top: 0.2rem;
-    }
-    .watchlist-rating {
-      font-family: var(--serif); font-size: 0.95rem;
-      color: var(--gold); flex-shrink: 0; margin-right: 0.5rem;
-    }
-    .btn-remove {
-      background: transparent; border: 1px solid var(--border);
-      color: var(--muted); font-family: var(--sans);
-      font-size: 0.58rem; letter-spacing: 0.15em; text-transform: uppercase;
-      padding: 0.38rem 0.75rem; cursor: pointer; flex-shrink: 0;
-      transition: all 0.2s ease;
-    }
-    .btn-remove:hover { border-color: rgba(220,60,60,0.5); color: #e05252; }
+    /* ── WATCHLIST PAGE ── */
+    #watchlist { padding: 0; justify-content: stretch; align-items: stretch; }
+    .wl-scroll { padding: 3rem 2rem 5rem; }
 
-    /* ── comments ── */
-    .comments-section {
-      width: 100%; max-width: 1000px;
-      margin-top: 3rem; padding-top: 2rem;
-      border-top: 1px solid var(--border);
+    .wl-header {
+      width: 100%; max-width: 1100px;
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 2.5rem; gap: 1rem; flex-wrap: wrap;
     }
-    #disqus_thread { color-scheme: dark; }
+    .wl-header-left { display: flex; flex-direction: column; gap: 0.5rem; }
+    .wl-back {
+      font-family: var(--sans); font-size: 0.6rem; letter-spacing: 0.25em;
+      text-transform: uppercase; color: var(--muted);
+      background: none; border: none; cursor: pointer;
+      display: flex; align-items: center; gap: 0.4rem;
+      transition: color 0.2s ease; padding: 0;
+    }
+    .wl-back:hover { color: var(--gold); }
+    .wl-title {
+      font-family: var(--serif); font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 300; font-style: italic;
+    }
+    .wl-stats {
+      font-family: var(--sans); font-size: 0.62rem;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted);
+    }
+    .wl-stats span { color: var(--gold); }
+
+    .wl-filters {
+      display: flex; gap: 0; border: 1px solid var(--border); align-self: flex-start;
+    }
+    .wl-filter {
+      font-family: var(--sans); font-size: 0.6rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--muted);
+      background: none; border: none; padding: 0.65rem 1.4rem;
+      cursor: pointer; transition: all 0.2s ease; border-right: 1px solid var(--border);
+    }
+    .wl-filter:last-child { border-right: none; }
+    .wl-filter:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+    .wl-filter.active { color: var(--black); background: var(--gold); }
+
+    .wl-empty {
+      width: 100%; max-width: 1100px; text-align: center;
+      padding: 5rem 2rem;
+    }
+    .wl-empty-icon { font-size: 3rem; margin-bottom: 1.2rem; opacity: 0.4; }
+    .wl-empty-text {
+      font-family: var(--serif); font-size: 1.2rem; font-style: italic;
+      color: var(--muted);
+    }
+
+    .wl-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem; width: 100%; max-width: 1100px;
+    }
+
+    .wl-card {
+      background: var(--card); border: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      transition: border-color 0.22s ease, transform 0.22s ease;
+      position: relative; overflow: hidden;
+    }
+    .wl-card:hover { border-color: rgba(245,200,66,0.35); transform: translateY(-3px); }
+    .wl-card.watched { opacity: 0.55; }
+    .wl-card.watched:hover { opacity: 0.8; }
+
+    .wl-card-poster {
+      width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block;
+    }
+    .wl-card-poster-ph {
+      width: 100%; aspect-ratio: 2/3;
+      background: rgba(245,200,66,0.05);
+      display: flex; align-items: center; justify-content: center; font-size: 3rem;
+    }
+    .wl-watched-badge {
+      position: absolute; top: 0.6rem; left: 0.6rem;
+      background: rgba(7,7,15,0.85); border: 1px solid var(--gold);
+      color: var(--gold); font-family: var(--sans); font-size: 0.55rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      padding: 0.3rem 0.65rem; display: none;
+    }
+    .wl-card.watched .wl-watched-badge { display: block; }
+
+    .wl-card-body { padding: 1rem 1rem 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; flex: 1; }
+    .wl-card-title {
+      font-family: var(--serif); font-size: 1.05rem; font-weight: 400;
+      line-height: 1.25; color: var(--text);
+    }
+    .wl-card-meta {
+      font-family: var(--sans); font-size: 0.6rem;
+      color: var(--muted); letter-spacing: 0.05em;
+    }
+    .wl-card-rating {
+      font-family: var(--serif); font-size: 0.9rem; color: var(--gold);
+      margin-top: auto; padding-top: 0.4rem;
+    }
+    .wl-card-actions {
+      display: flex; gap: 0; border-top: 1px solid var(--border);
+    }
+    .wl-card-btn {
+      flex: 1; font-family: var(--sans); font-size: 0.58rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      background: none; border: none; color: var(--muted);
+      padding: 0.75rem 0.5rem; cursor: pointer; transition: all 0.2s ease;
+      border-right: 1px solid var(--border);
+    }
+    .wl-card-btn:last-child { border-right: none; }
+    .wl-card-btn:hover { background: rgba(255,255,255,0.04); color: var(--text); }
+    .wl-card-btn.watch-btn:hover { color: var(--gold); }
+    .wl-card-btn.remove-btn:hover { color: #e05252; }
+    .wl-card.watched .watch-btn { color: rgba(245,200,66,0.6); }
 
     /* ── responsive ── */
     @media (max-width: 860px) {
       .quiz-all-grid { grid-template-columns: 1fr; }
+      .wl-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 680px) {
       .quiz-block .option-card { padding: 0.75rem 0.55rem; }
       .result-layout { grid-template-columns: 1fr; }
       .poster-wrap { max-width: 190px; margin: 0 auto; }
+      .wl-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -435,22 +464,19 @@
 
 <!-- ── INTRO ── -->
 <section class="screen active" id="intro">
-  <div class="intro-scroll">
+  <div class="page-scroll intro-scroll">
     <div class="intro-hero">
       <p class="intro-eyebrow">A cinematic experience</p>
       <h1 class="intro-title">Vibe<br><span class="gold">Check</span></h1>
       <div class="intro-rule"></div>
       <p class="intro-sub">Four questions. One perfect movie. No spoilers.</p>
-      <button class="btn-primary" onclick="startQuiz()"><span>Begin the Check</span></button>
+      <div class="intro-cta-row">
+        <button class="btn-primary" onclick="startQuiz()"><span>Begin the Check</span></button>
+        <button class="watchlist-link hidden" id="watchlistLink" onclick="openWatchlist()">
+          My Watchlist <span class="watchlist-badge" id="watchlistBadge">0</span>
+        </button>
+      </div>
     </div>
-
-    <!-- watchlist -->
-    <div class="watchlist-section hidden" id="watchlistSection">
-      <p class="plot-label" style="margin-bottom:1.2rem;">Your Watchlist</p>
-      <div class="watchlist-list" id="watchlistList"></div>
-    </div>
-
-    <!-- discussion -->
     <div class="comments-section">
       <p class="plot-label" style="margin-bottom:1.5rem;">Discussion</p>
       <div id="disqus_thread"></div>
@@ -458,9 +484,9 @@
   </div>
 </section>
 
-<!-- ── QUIZ (all questions) ── -->
+<!-- ── QUIZ ── -->
 <section class="screen" id="quiz">
-  <div class="quiz-scroll">
+  <div class="page-scroll quiz-scroll">
     <div class="quiz-all-header">
       <p class="quiz-all-title">What's your vibe tonight?</p>
       <span class="quiz-progress-label" id="quizProgress">0 of 4 answered</span>
@@ -487,7 +513,7 @@
 
 <!-- ── RESULT ── -->
 <section class="screen" id="result">
-  <div class="result-scroll">
+  <div class="page-scroll result-scroll">
     <p class="result-eyebrow">Your vibe. Your movie.</p>
     <div class="vibe-pill" id="vibePill">✦ loading...</div>
     <div class="result-layout">
@@ -541,6 +567,25 @@
   </div>
 </section>
 
+<!-- ── WATCHLIST PAGE ── -->
+<section class="screen" id="watchlist">
+  <div class="page-scroll wl-scroll">
+    <div class="wl-header">
+      <div class="wl-header-left">
+        <button class="wl-back" onclick="closeWatchlist()">← Back</button>
+        <h2 class="wl-title">My Watchlist</h2>
+        <p class="wl-stats" id="wlStats">0 movies</p>
+      </div>
+      <div class="wl-filters">
+        <button class="wl-filter active" data-filter="all" onclick="setFilter('all')">All</button>
+        <button class="wl-filter" data-filter="unwatched" onclick="setFilter('unwatched')">To Watch</button>
+        <button class="wl-filter" data-filter="watched" onclick="setFilter('watched')">Watched</button>
+      </div>
+    </div>
+    <div id="wlContent" style="width:100%;max-width:1100px;"></div>
+  </div>
+</section>
+
 <script>
   const OMDB_KEY = '21cd354a';
 
@@ -577,18 +622,16 @@
     c:"Buckle up — this one will mess with your head in the best way.",
     d:'Perfect for when you just want to feel something good.',
   };
-
   const LOADING_LINES = [
-    'Scanning the archives...',
-    'Consulting the film gods...',
-    'Rewinding the reels...',
-    'Checking your vibe twice...',
-    'Almost there...',
+    'Scanning the archives...','Consulting the film gods...',
+    'Rewinding the reels...','Checking your vibe twice...','Almost there...',
   ];
 
   // ── state
   let answers = {};
   let currentMovie = null;
+  let activeFilter = 'all';
+  let wlReturnScreen = 'intro';
 
   // ── helpers
   function showError(msg) {
@@ -622,25 +665,19 @@
     QUESTIONS.forEach((q, qi) => {
       const block = document.createElement('div');
       block.className = 'quiz-block';
-      block.innerHTML = `
-        <p class="quiz-block-num">Question ${qi + 1}</p>
-        <p class="quiz-block-q">${q.question}</p>
-        <div class="options-grid"></div>
-      `;
+      block.innerHTML = `<p class="quiz-block-num">Question ${qi + 1}</p><p class="quiz-block-q">${q.question}</p><div class="options-grid"></div>`;
       const optGrid = block.querySelector('.options-grid');
       Object.entries(q.options).forEach(([key, label]) => {
         const emojis = label.match(emojiRe) || ['🎬'];
         const text   = label.replace(emojiRe, '').trim();
         const card   = document.createElement('div');
-        card.className = 'option-card';
-        card.dataset.key = key;
+        card.className = 'option-card'; card.dataset.key = key;
         card.innerHTML = `<span class="option-emoji">${emojis.join('')}</span><span class="option-label">${text}</span>`;
         card.addEventListener('click', () => pickAnswer(q.id, key, block));
         optGrid.appendChild(card);
       });
       grid.appendChild(block);
     });
-
     updateQuizProgress();
   }
 
@@ -660,7 +697,6 @@
   // ── recommendation
   async function fetchRec() {
     showScreen('loading');
-
     let li = 0;
     const lt = document.getElementById('loadingText');
     const interval = setInterval(() => {
@@ -719,7 +755,6 @@
       wrap.appendChild(ph);
     }
 
-    // sync watchlist button
     const inList = getWatchlist().some(m => m.title === movie.Title);
     const btn = document.getElementById('watchlistBtn');
     btn.textContent = inList ? '✓ In Watchlist' : '+ Watchlist';
@@ -732,19 +767,19 @@
   function restart() {
     answers = {};
     delete document.body.dataset.mood;
-    renderWatchlist();
+    updateWatchlistLink();
     showScreen('intro');
   }
 
-  // ── watchlist
+  // ── watchlist data
   function getWatchlist() {
     return JSON.parse(localStorage.getItem('watchlist') || '[]');
   }
-
   function saveWatchlist(list) {
     localStorage.setItem('watchlist', JSON.stringify(list));
   }
 
+  // ── watchlist toggle from result screen
   function toggleWatchlist() {
     if (!currentMovie) return;
     const list = getWatchlist();
@@ -753,11 +788,12 @@
 
     if (idx === -1) {
       list.push({
-        title:  currentMovie.Title,
-        year:   currentMovie.Year,
-        genre:  currentMovie.Genre,
-        rating: currentMovie.imdbRating,
-        poster: currentMovie.Poster,
+        title:   currentMovie.Title,
+        year:    currentMovie.Year,
+        genre:   currentMovie.Genre,
+        rating:  currentMovie.imdbRating,
+        poster:  currentMovie.Poster,
+        watched: false,
       });
       btn.textContent = '✓ In Watchlist';
       btn.classList.add('in-list');
@@ -767,49 +803,119 @@
       btn.classList.remove('in-list');
     }
     saveWatchlist(list);
+    updateWatchlistLink();
   }
 
-  function removeFromWatchlist(title) {
+  // ── watchlist page
+  function openWatchlist() {
+    const activeId = document.querySelector('.screen.active')?.id || 'intro';
+    wlReturnScreen = activeId;
+    activeFilter = 'all';
+    renderWatchlistPage();
+    showScreen('watchlist');
+  }
+
+  function closeWatchlist() {
+    updateWatchlistLink();
+    showScreen(wlReturnScreen);
+  }
+
+  function setFilter(f) {
+    activeFilter = f;
+    document.querySelectorAll('.wl-filter').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.filter === f);
+    });
+    renderWatchlistPage();
+  }
+
+  function toggleWatched(title) {
+    const list = getWatchlist();
+    const item = list.find(m => m.title === title);
+    if (item) item.watched = !item.watched;
+    saveWatchlist(list);
+    renderWatchlistPage();
+    updateWatchlistLink();
+  }
+
+  function removeMovie(title) {
     saveWatchlist(getWatchlist().filter(m => m.title !== title));
-    renderWatchlist();
     if (currentMovie && currentMovie.Title === title) {
       const btn = document.getElementById('watchlistBtn');
       btn.textContent = '+ Watchlist';
       btn.classList.remove('in-list');
     }
+    renderWatchlistPage();
+    updateWatchlistLink();
   }
 
-  function renderWatchlist() {
-    const list      = getWatchlist();
-    const section   = document.getElementById('watchlistSection');
-    const container = document.getElementById('watchlistList');
+  function renderWatchlistPage() {
+    const all      = getWatchlist();
+    const total    = all.length;
+    const watched  = all.filter(m => m.watched).length;
+    const unwatched = total - watched;
 
-    if (list.length === 0) { section.classList.add('hidden'); return; }
-    section.classList.remove('hidden');
-    container.innerHTML = '';
+    document.getElementById('wlStats').innerHTML =
+      `<span>${total}</span> movie${total !== 1 ? 's' : ''} &nbsp;·&nbsp; <span>${watched}</span> watched &nbsp;·&nbsp; <span>${unwatched}</span> to watch`;
 
-    list.forEach(movie => {
-      const item = document.createElement('div');
-      item.className = 'watchlist-item';
-      const posterEl = (movie.poster && movie.poster !== 'N/A')
-        ? `<img class="watchlist-poster" src="${movie.poster}" alt="${movie.title}">`
-        : `<div class="watchlist-poster-ph">🎬</div>`;
-      const safeTitle = movie.title.replace(/'/g, "\\'");
-      item.innerHTML = `
+    const filtered = activeFilter === 'watched'   ? all.filter(m => m.watched)
+                   : activeFilter === 'unwatched' ? all.filter(m => !m.watched)
+                   : all;
+
+    const container = document.getElementById('wlContent');
+
+    if (filtered.length === 0) {
+      const msg = activeFilter === 'watched'   ? 'No watched movies yet.'
+                : activeFilter === 'unwatched' ? 'Nothing left to watch!'
+                : 'Your watchlist is empty. Find a movie and save it here.';
+      container.innerHTML = `
+        <div class="wl-empty">
+          <div class="wl-empty-icon">🎬</div>
+          <p class="wl-empty-text">${msg}</p>
+        </div>`;
+      return;
+    }
+
+    const grid = document.createElement('div');
+    grid.className = 'wl-grid';
+
+    filtered.forEach(movie => {
+      const safeTitle = movie.title.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+      const posterEl  = (movie.poster && movie.poster !== 'N/A')
+        ? `<img class="wl-card-poster" src="${movie.poster}" alt="${movie.title}">`
+        : `<div class="wl-card-poster-ph">🎬</div>`;
+      const watchLabel = movie.watched ? '✓ Watched' : 'Mark Watched';
+
+      const card = document.createElement('div');
+      card.className = `wl-card${movie.watched ? ' watched' : ''}`;
+      card.innerHTML = `
         ${posterEl}
-        <div class="watchlist-info">
-          <div class="watchlist-title">${movie.title}</div>
-          <div class="watchlist-meta">${movie.year} · ${movie.genre || '—'}</div>
+        <div class="wl-watched-badge">✓ Watched</div>
+        <div class="wl-card-body">
+          <div class="wl-card-title">${movie.title}</div>
+          <div class="wl-card-meta">${movie.year} · ${movie.genre ? movie.genre.split(',')[0] : '—'}</div>
+          <div class="wl-card-rating">★ ${movie.rating !== 'N/A' ? movie.rating : '—'}</div>
         </div>
-        <span class="watchlist-rating">★ ${movie.rating}</span>
-        <button class="btn-remove" onclick="removeFromWatchlist('${safeTitle}')">Remove</button>
-      `;
-      container.appendChild(item);
+        <div class="wl-card-actions">
+          <button class="wl-card-btn watch-btn" onclick="toggleWatched('${safeTitle}')">${watchLabel}</button>
+          <button class="wl-card-btn remove-btn" onclick="removeMovie('${safeTitle}')">Remove</button>
+        </div>`;
+      grid.appendChild(card);
     });
+
+    container.innerHTML = '';
+    container.appendChild(grid);
+  }
+
+  function updateWatchlistLink() {
+    const count = getWatchlist().length;
+    const link  = document.getElementById('watchlistLink');
+    const badge = document.getElementById('watchlistBadge');
+    link.classList.toggle('hidden', count === 0);
+    badge.textContent = count;
   }
 
   // init
-  renderWatchlist();
+  updateWatchlistLink();
 </script>
 
 <script>
